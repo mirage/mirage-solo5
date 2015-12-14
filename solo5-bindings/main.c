@@ -14,18 +14,20 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
+#if 0
 #include <mini-os/os.h>
 #include <mini-os/sched.h>
 #include <mini-os/events.h>
 #include <mini-os/console.h>
 #include <mini-os/gnttab.h>
-#include <mini-os/time.h>
-#include <time.h>
+#endif
 
+#include "solo5.h"
 #include <caml/mlvalues.h>
 #include <caml/memory.h>
 #include <caml/callback.h>
 
+#if 0
 #undef local_irq_save
 #undef local_irq_enable
 #define local_irq_save(x) printk("IGNORING: local_irq_save\n");
@@ -33,10 +35,10 @@
 
 void _exit(int);
 int errno;
+#endif
 static char *argv[] = { "mirage", NULL };
+#if 0
 static unsigned long irqflags;
-
-s_time_t not_running_time = 0;
 
 /* XXX TODO: keep in sync with mirage-xen-minios */
 void setup_xen_features(void);
@@ -45,54 +47,65 @@ CAMLprim value
 caml_block_domain(value v_until)
 {
   CAMLparam1(v_until);
-  s_time_t t0, t1;
-  t0 = monotonic_clock();
   block_domain((s_time_t)(Int64_val(v_until)));
-  t1 = monotonic_clock();
-  not_running_time += t1 - t0;
+  CAMLreturn(Val_unit);
+}
+#endif
+
+CAMLprim value
+caml_block_domain(value v_until)
+{
+  CAMLparam1(v_until);
+  uint64_t until = (Int64_val(v_until));
+  while(time_monotonic_ns() < until);
   CAMLreturn(Val_unit);
 }
 
-void app_main_thread(void *unused)
+void app_main_thread(void __attribute__((__unused__)) *unused)
 {
-  local_irq_save(irqflags);
+    //local_irq_save(irqflags);
   caml_startup(argv);
-  _exit(0);
+  //PANIC("app finished\n");
+  //_exit(0);
 }
+
+void start_info_init(void); /* in start_info_stubs.c */
 
 void start_kernel(void)
 {
-  printk("DJW: Alternate bindings\n");
+  printk("DJW: new bindings\n");
+
+  start_info_init();
 
   /* Set up events. */
-  init_events();
+  //init_events();
 
   /* Enable event delivery. This is disabled at start of day. */
-  local_irq_enable();
-
-  setup_xen_features();
+  //local_irq_enable();
+  
+  //setup_xen_features();
 
   /* Init memory management.
    * Needed for malloc. */
-  init_mm();
+  //init_mm();
 
   /* Init time and timers. Needed for block_domain. */
-  init_time();
-  not_running_time = monotonic_clock();
+  //init_time();
 
   /* Init the console driver.
    * We probably do need this if we want printk to send notifications correctly. */
-  init_console();
+  //init_console();
 
-  printk("DJW: Initialized console!!!\n");
+  //printk("DJW: Initialized console!!!\n");
 
   /* Init grant tables. */
-  init_gnttab();
+  //init_gnttab();
 
   /* Call our main function directly, without using Mini-OS threads. */
   app_main_thread(NULL);
 }
 
+#if 0
 void _exit(int ret)
 {
   stop_kernel();
@@ -103,3 +116,4 @@ void _exit(int ret)
   }
   do_exit();
 }
+#endif
