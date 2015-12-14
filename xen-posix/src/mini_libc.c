@@ -22,6 +22,10 @@
 #include <sys/types.h>
 #include <sys/times.h>
 #include "fmt_fp.h"
+
+#define DJW_NO_MINIOS
+
+
 #define HUGE_VAL	(__builtin_huge_val())
 
 #define     ENOSYS          38      /* Function not implemented */
@@ -68,6 +72,7 @@ char *getenv(__attribute__((unused)) const char *name)
   return NULL;
 }
 
+#ifndef DJW_NO_MINIOS
 void* calloc(size_t nmemb, size_t _size)
 {
   register size_t size=_size*nmemb;
@@ -75,6 +80,7 @@ void* calloc(size_t nmemb, size_t _size)
   memset(x,0,size);
   return x;
 }
+#endif
 
 ssize_t write(int fd, const void *buf, size_t count)
 {
@@ -129,6 +135,7 @@ int fprintf(void *stream UNUSED, const char *fmt, ...)
   return 1;
 }
 
+#ifndef DJW_NO_MINIOS
 int printf(const char *fmt, ...)
 {
   va_list args;
@@ -137,6 +144,7 @@ int printf(const char *fmt, ...)
   va_end(args);
   return 1;
 }
+#endif
 
 int fflush (void * stream UNUSED)
 {
