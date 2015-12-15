@@ -127,6 +127,7 @@ void out(buffer_t *f, const char *s, size_t l)
     }
 }
 
+#ifndef DJW_NO_MINIOS
 int fprintf(void *stream UNUSED, const char *fmt, ...)
 {
   va_list  args;
@@ -136,7 +137,6 @@ int fprintf(void *stream UNUSED, const char *fmt, ...)
   return 1;
 }
 
-#ifndef DJW_NO_MINIOS
 int printf(const char *fmt, ...)
 {
   va_list args;
