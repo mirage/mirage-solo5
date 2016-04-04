@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010 Anil Madhavapeddy <anil@recoil.org>
+ * Copyright (c) 2015 Thomas Leonard <talex5@gmail.com>
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -14,28 +14,17 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-#include <stdio.h>
-#include <string.h>
 #include <caml/mlvalues.h>
-#include <caml/alloc.h>
-
-/* Dont bother with full console, just direct everything to
-   stderr, so console_create is a noop for now */
+#include <mini-os/mm.h>
 
 CAMLprim value
-console_create(value v_unit)
+stub_heap_get_pages_total(value unit) // noalloc
 {
-    return Val_int(0);
+  return Val_long(minios_heap_pages_total);
 }
 
 CAMLprim value
-console_write(value v_cons, value v_buf, value v_off, value v_len)
+stub_heap_get_pages_used(value unit) // noalloc
 {
-    int len = Int_val(v_len);
-    char buf[len+1];
-    memcpy(buf, String_val(v_buf)+Int_val(v_off), Int_val(v_len));
-    buf[len] = '\0';
-    fprintf(stderr, "%s", buf);
-    fflush(stderr);
-    return Val_unit;
+  return Val_long(minios_heap_pages_used);
 }

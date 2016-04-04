@@ -10,12 +10,11 @@ let rec call_hooks hooks  =
     | Some f ->
         (* Run the hooks in parallel *)
         let _ =
-          try_lwt
-            f ()
-          with exn ->
+          Lwt.catch f
+          (fun exn ->
             Printf.printf "enter_t: exn %s\n%!" (Printexc.to_string exn);
             return ()
-        in
+          ) in
         call_hooks hooks
 
 open Printf
@@ -24,7 +23,10 @@ open Printf
    when timeouts expire. Thus, the program may only call this function
    once and once only. *)
 let run t =
-  Sys.(set_signal sigpipe Signal_ignore);
+  (* If the platform doesn't have SIGPIPE, then Sys.set_signal will
+     raise an Invalid_argument exception. If the signal does not exist
+     then we don't need to ignore it, so it's safe to continue. *)
+  (try Sys.(set_signal sigpipe Signal_ignore) with Invalid_argument _ -> ());
   let t = call_hooks enter_hooks <&> t in
   Lwt_unix.run t
 

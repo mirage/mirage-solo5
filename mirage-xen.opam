@@ -4,6 +4,7 @@ authors:      "The MirageOS team"
 homepage:     "https://github.com/mirage/mirage-platform"
 bug-reports:  "https://github.com/mirage/mirage-platform/issues/"
 dev-repo:     "https://github.com/mirage/mirage-platform.git"
+license:      "part ISC, part LBPL-2.1 with OCaml linking ecxeption, part 3-clause BSD"
 
 build:   [make "xen-build"]
 install: [make "xen-install"   "PREFIX=%{prefix}%"]
@@ -20,6 +21,7 @@ depends: [
   "xen-evtchn" {>= "0.9.9"}
   "xen-gnt" {>= "2.0.0"}
   "mirage-xen-minios" {>= "0.7.0"}
+  "minios-xen" {>= "0.9"}
   "conf-pkg-config"
   "mirage-profile" {>= "0.3"}
   "mirage-xen-ocaml"
