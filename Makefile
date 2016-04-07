@@ -29,13 +29,25 @@ doc:
 unix-%:
 	$(MAKE) MIRAGE_OS=unix PREFIX=$(PREFIX) $*
 
+solo5-build:
+	cd solo5 && $(MAKE)
+	cd solo5-bindings && $(MAKE) build
+
 xen-build:
 	cd xen && $(MAKE)
 	cd bindings && $(MAKE) build
 
+solo5-install:
+	cd solo5 && $(MAKE) install
+	cd solo5-bindings && $(MAKE) install
+
 xen-install:
 	cd xen && $(MAKE) install
 	cd bindings && $(MAKE) install
+
+solo5-uninstall:
+	ocamlfind remove mirage-solo5 || true
+	cd solo5-bindings && $(MAKE) uninstall
 
 xen-uninstall:
 	ocamlfind remove mirage-xen || true

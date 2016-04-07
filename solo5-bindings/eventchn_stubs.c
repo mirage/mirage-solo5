@@ -26,6 +26,7 @@
 #include <caml/alloc.h>
 #include <caml/callback.h>
 #include <caml/bigarray.h>
+#include <caml/fail.h>
 
 #define NR_EVENTS 4096 /* max for x86_64 using old ABI */
 
@@ -149,7 +150,7 @@ stub_evtchn_alloc_unbound(value v_unit, value v_domid)
 
     rc = evtchn_alloc_unbound(domid, NULL, NULL, &port);
     if (rc)
-       CAMLreturn(Val_int(-1));
+       caml_failwith("evtchn_alloc_unbound");
     else
        CAMLreturn(Val_int(port)); 
 }
@@ -165,7 +166,7 @@ stub_evtchn_bind_interdomain(value v_unit, value v_domid, value v_remote_port)
 
     rc = evtchn_bind_interdomain(domid, remote_port, NULL, NULL, &local_port);
     if (rc)
-       CAMLreturn(Val_int(-1));
+       caml_failwith("evtchn_bind_interdomain");
     else
        CAMLreturn(Val_int(local_port)); 
 }

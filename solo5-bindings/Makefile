@@ -1,5 +1,5 @@
-SOLO5_DIR=/root/solo5/kernel
-OPAM_DIR=/root/.opam/4.01.0
+SOLO5_DIR=/home/solo5/solo5/kernel
+OPAM_DIR=/home/solo5/.opam/4.02.3
 
 include $(SOLO5_DIR)/Makefile.solo5
 
@@ -20,6 +20,7 @@ start_info_stubs.o \
 barrier_stubs.o \
 cstruct_stubs.o \
 clock_stubs.o \
+mm_stubs.o \
 main.o
 
 # exit_stubs.o \
