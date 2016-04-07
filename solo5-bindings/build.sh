@@ -1,8 +1,16 @@
 #!/bin/sh -ex
 
-export PKG_CONFIG_PATH=`opam config var prefix`/lib/pkgconfig
 PKG_CONFIG_DEPS="mirage-xen-minios mirage-xen-ocaml"
-pkg-config --print-errors --exists ${PKG_CONFIG_DEPS} || exit 1
+check_deps () {
+  pkg-config --print-errors --exists ${PKG_CONFIG_DEPS}
+}
+
+if ! check_deps 2>/dev/null; then
+  # only rely on `opam` if deps are unavailable
+  export PKG_CONFIG_PATH=`opam config var prefix`/lib/pkgconfig
+fi
+check_deps || exit 1
+
 CFLAGS=`pkg-config --cflags mirage-xen-ocaml`
 MINIOS_CFLAGS=`pkg-config --cflags mirage-xen-minios mirage-xen-ocaml`
 
@@ -13,7 +21,6 @@ if [ $GCC_MVER2 -ge 8 ]; then
 fi
 
 CC=${CC:-cc}
-$CC -Wall -Wno-attributes -g ${MINIOS_CFLAGS} ${EXTRA_CFLAGS} -c barrier_stubs.c eventchn_stubs.c exit_stubs.c gnttab_stubs.c main.c sched_stubs.c  xb_stubs.c start_info_stubs.c
-
-
-$CC -Wall -Wno-attributes -g ${CFLAGS} ${EXTRA_CFLAGS} -c
+$CC -Wall -Wno-attributes ${MINIOS_CFLAGS} ${EXTRA_CFLAGS} ${CI_CFLAGS} -c barrier_stubs.c eventchn_stubs.c exit_stubs.c gnttab_stubs.c main.c sched_stubs.c start_info_stubs.c xb_stubs.c mm_stubs.c
+$CC -Wall -Wno-attributes ${CFLAGS} ${EXTRA_CFLAGS} ${CI_CFLAGS} -c atomic_stubs.c clock_stubs.c cstruct_stubs.c
+ar rcs libxencamlbindings.a *.o

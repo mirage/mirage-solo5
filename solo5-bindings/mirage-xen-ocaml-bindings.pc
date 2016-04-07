@@ -3,11 +3,11 @@ exec_prefix=${prefix}
 includedir=${prefix}/include/mirage-xen/include
 libdir=${exec_prefix}/lib
 
-Name: mirage-xen-ocaml-bindings
+Name: mirage-solo5-ocaml-bindings
 Version: 1.0.0
 URL: https://github.com/mirage/mirage-platform/
 Description: OCaml bindings to support Mirage Xen
 Cflags: -I${includedir}
-Libs: ${libdir}/mirage-xen/libxencamlbindings.a
+Libs: ${libdir}/solo5-bindings/libsolo5camlbindings.a
 Requires: mirage-xen-ocaml
 
