@@ -14,43 +14,12 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-#if 0
-#include <mini-os/os.h>
-#include <mini-os/sched.h>
-#include <mini-os/events.h>
-#include <mini-os/console.h>
-#include <mini-os/gnttab.h>
-#endif
-
 #include "solo5.h"
 #include <caml/mlvalues.h>
 #include <caml/memory.h>
 #include <caml/callback.h>
 
-#if 0
-#undef local_irq_save
-#undef local_irq_enable
-#define local_irq_save(x) printk("IGNORING: local_irq_save\n");
-#define local_irq_enable() printk("IGNORING: local_irq_enable\n");
-
-void _exit(int);
-int errno;
-#endif
 static char *argv[] = { "mirage", NULL };
-#if 0
-static unsigned long irqflags;
-
-/* XXX TODO: keep in sync with mirage-xen-minios */
-void setup_xen_features(void);
-
-CAMLprim value
-caml_block_domain(value v_until)
-{
-  CAMLparam1(v_until);
-  block_domain((s_time_t)(Int64_val(v_until)));
-  CAMLreturn(Val_unit);
-}
-#endif
 
 CAMLprim value
 caml_block_domain(value v_until)
@@ -73,7 +42,7 @@ void start_info_init(void); /* in start_info_stubs.c */
 
 void start_kernel(void)
 {
-  printk("DJW: new bindings\n");
+  printk("Solo5: new bindings\n");
 
   start_info_init();
 

@@ -146,16 +146,18 @@ int printf(const char *fmt, ...)
 }
 #endif
 
+
+void abort(void)
+{
+    printk("warning: abort called\n");
+    //do_exit();
+}
+
 int fflush (void * stream UNUSED)
 {
   return 0;
 }
 
-void abort(void)
-{
-  printk("Abort called!\n");
-  do_exit();
-}
 
 #define ZEROPAD 1               /* pad with zero */
 #define SIGN    2               /* unsigned/signed long */
@@ -164,6 +166,8 @@ void abort(void)
 #define LEFT    16              /* left justified */
 #define SPECIAL 32              /* 0x */
 #define LARGE   64              /* use 'ABCDEF' instead of 'abcdef' */
+
+#ifndef DJW_NO_MINIOS
 
 char *minios_printf_render_float(char *buf, char *end, long double y, char fmt, char qualifier UNUSED, int size, int precision, int type)
 {
@@ -183,6 +187,7 @@ char *minios_printf_render_float(char *buf, char *end, long double y, char fmt, 
 
     return buffer.buf;
 }
+#endif
 
 long sysconf(int name) {
     printk("sysconf(%d) -> EINVAL\n", name);
