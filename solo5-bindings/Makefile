@@ -28,7 +28,10 @@ main.o
 # xb_stubs.o \
 # atomic_stubs.o \
 
+.PHONY: all build clean install
+
 all: libsolo5camlbindings.a
+build: libsolo5camlbindings.a
 
 %.o: %.c $(SOLO5_DIR)/solo5.h
 	$(S5_GCC) $(S5_CFLAGS) -c $< -o $@
@@ -38,3 +41,6 @@ libsolo5camlbindings.a: $(OBJS)
 
 clean:
 	rm -f *.o *.a 
+
+install:
+	./install.sh
