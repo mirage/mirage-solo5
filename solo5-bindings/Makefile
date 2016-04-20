@@ -21,6 +21,9 @@ barrier_stubs.o \
 cstruct_stubs.o \
 clock_stubs.o \
 mm_stubs.o \
+solo5_net_stubs.o \
+solo5_block_stubs.o \
+solo5_console_stubs.o \
 main.o
 
 # exit_stubs.o \
