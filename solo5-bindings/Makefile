@@ -24,6 +24,7 @@ mm_stubs.o \
 solo5_net_stubs.o \
 solo5_block_stubs.o \
 solo5_console_stubs.o \
+solo5_undefined.o \
 main.o
 
 # exit_stubs.o \
