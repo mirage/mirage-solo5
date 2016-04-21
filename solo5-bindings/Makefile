@@ -1,10 +1,7 @@
-SOLO5_DIR=/home/solo5/solo5/kernel
-OPAM_DIR=/home/solo5/.opam/4.02.3
+OPAM_DIR=$(shell opam config var prefix)
 
-include $(SOLO5_DIR)/Makefile.solo5
-
-S5_CFLAGS+=-Istubincludes -I$(OPAM_DIR)/include/mirage-xen-ocaml/include -I$(OPAM_DIR)/include/mirage-xen-posix/include -I$(OPAM_DIR)/include -I$(SOLO5_DIR) \
--Wno-error
+CFLAGS=$(shell PKG_CONFIG_PATH=$(OPAM_DIR)/lib/pkgconfig pkg-config solo5-kernel-ukvm --cflags)
+CFLAGS+=-Istubincludes -I$(OPAM_DIR)/include/mirage-xen-ocaml/include -I$(OPAM_DIR)/include/mirage-xen-posix/include
 
 # We generate empty include files for "system" include files, by
 # calculating the includes that are needed by the bindings.  The
@@ -37,11 +34,11 @@ main.o
 all: libsolo5camlbindings.a
 build: libsolo5camlbindings.a
 
-%.o: %.c $(SOLO5_DIR)/solo5.h
-	$(S5_GCC) $(S5_CFLAGS) -c $< -o $@
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
 
 libsolo5camlbindings.a: $(OBJS)
-	$(S5_AR) rcs $@ $(OBJS)
+	$(AR) rcs $@ $(OBJS)
 
 clean:
 	rm -f *.o *.a 
