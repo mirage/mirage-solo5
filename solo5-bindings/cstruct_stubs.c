@@ -20,6 +20,7 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <string.h>
+#include <stdint.h>
 #endif
 
 #include "solo5.h"
@@ -72,4 +73,12 @@ caml_fill_bigstring(value val_buf, value val_ofs, value val_len, value val_byte)
          Int_val(val_byte),
          Long_val(val_len));
   return Val_unit;
+}
+
+CAMLprim value
+caml_check_alignment_bigstring(value val_buf, value val_ofs, value val_alignment)
+{
+  uint64_t address = (uint64_t) (Caml_ba_data_val(val_buf) + Long_val(val_ofs));
+  int alignment = Int_val(val_alignment);
+  return Val_bool(address % alignment == 0);
 }
