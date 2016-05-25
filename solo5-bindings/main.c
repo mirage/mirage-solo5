@@ -26,63 +26,22 @@ caml_block_domain(value v_until)
 {
   CAMLparam1(v_until);
   uint64_t until = (Int64_val(v_until));
-  while(time_monotonic_ns() < until);
+  while(solo5_clock_monotonic() < until);
   CAMLreturn(Val_unit);
 }
 
-void app_main_thread(void __attribute__((__unused__)) *unused)
+CAMLprim value
+stub_evtchn_look_for_work(value v_unit)
 {
-    //local_irq_save(irqflags);
-  caml_startup(argv);
-  //PANIC("app finished\n");
-  //_exit(0);
+    CAMLparam1(v_unit);
+    CAMLlocal1(work_to_do);
+    work_to_do = Val_bool(0);
+    CAMLreturn(work_to_do);
 }
-
-void start_info_init(void); /* in start_info_stubs.c */
 
 void start_kernel(void)
 {
-  printk("Solo5: new bindings\n");
+  printf("Solo5: new bindings\n");
 
-  start_info_init();
-
-  /* Set up events. */
-  //init_events();
-
-  /* Enable event delivery. This is disabled at start of day. */
-  //local_irq_enable();
-  
-  //setup_xen_features();
-
-  /* Init memory management.
-   * Needed for malloc. */
-  //init_mm();
-
-  /* Init time and timers. Needed for block_domain. */
-  //init_time();
-
-  /* Init the console driver.
-   * We probably do need this if we want printk to send notifications correctly. */
-  //init_console();
-
-  //printk("DJW: Initialized console!!!\n");
-
-  /* Init grant tables. */
-  //init_gnttab();
-
-  /* Call our main function directly, without using Mini-OS threads. */
-  app_main_thread(NULL);
+  caml_startup(argv);
 }
-
-#if 0
-void _exit(int ret)
-{
-  stop_kernel();
-  if (!ret) {
-    /* No problem, just shutdown.  */
-    struct sched_shutdown sched_shutdown = { .reason = SHUTDOWN_poweroff };
-    HYPERVISOR_sched_op(SCHEDOP_shutdown, &sched_shutdown);
-  }
-  do_exit();
-}
-#endif

@@ -25,7 +25,7 @@ open Lwt
 
 external block_domain : [`Time] Time.Monotonic.t -> unit = "caml_block_domain"
 
-let evtchn = Eventchn.init ()
+(* TODO let evtchn = Eventchn.init () *)
 
 let exit_hooks = Lwt_sequence.create ()
 let enter_hooks = Lwt_sequence.create ()
@@ -62,7 +62,7 @@ let run t =
            * and continue without blocking. *)
           (* Call enter hooks. *)
           Lwt_sequence.iter_l (fun f -> f ()) enter_iter_hooks;
-          Activations.run evtchn;
+          (* TODO Activations.run evtchn; *)
           (* Call leave hooks. *)
           Lwt_sequence.iter_l (fun f -> f ()) exit_iter_hooks;
           aux ()
