@@ -21,7 +21,8 @@ CAMLprim value
 stub_heap_get_pages_total(__attribute__((unused)) value unit) // noalloc
 {
 	//return Val_long(minios_heap_pages_total);
-	PANIC("unimplemented!");
+	printf("STUB: %s unimplemented, aborting", __func__);
+        solo5_exit();
 	return Val_long(0);
 }
 
@@ -29,6 +30,7 @@ CAMLprim value
 stub_heap_get_pages_used(__attribute__((unused)) value unit) // noalloc
 {
 	//return Val_long(minios_heap_pages_used);
-	PANIC("unimplemented!");
+	printf("STUB: %s unimplemented, aborting", __func__);
+        solo5_exit();
 	return Val_long(0);
 }
