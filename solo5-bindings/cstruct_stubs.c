@@ -15,15 +15,9 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-#if 0
-#include <sys/param.h>
-#include <stdlib.h>
-#include <errno.h>
-#include <string.h>
-#include <stdint.h>
-#endif
-
 #include "solo5.h"
+
+#include <string.h>
 
 #include <caml/mlvalues.h>
 #include <caml/memory.h>

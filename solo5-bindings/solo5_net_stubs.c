@@ -18,6 +18,8 @@
 
 #include "solo5.h"
 
+#include <assert.h>
+
 #include <caml/alloc.h>
 #include <caml/memory.h>
 #include <caml/signals.h>
