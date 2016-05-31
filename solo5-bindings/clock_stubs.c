@@ -16,6 +16,8 @@
 
 #include "solo5.h"
 
+#include <sys/time.h>
+
 #include <caml/mlvalues.h>
 #include <caml/alloc.h>
 #include <caml/memory.h>

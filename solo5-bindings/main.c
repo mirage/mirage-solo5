@@ -15,6 +15,9 @@
  */
 
 #include "solo5.h"
+
+#include <stdio.h>
+
 #include <caml/mlvalues.h>
 #include <caml/memory.h>
 #include <caml/callback.h>

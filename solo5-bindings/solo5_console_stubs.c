@@ -18,6 +18,8 @@
 
 #include "solo5.h"
 
+#include <string.h>
+
 #include <caml/alloc.h>
 #include <caml/memory.h>
 #include <caml/signals.h>
@@ -30,7 +32,7 @@ CAMLprim value stub_console_write(value arg) {
     CAMLparam1(arg);
 
     const char *str = String_val(arg);
-    printf("%s", str);
+    solo5_console_write(str, strlen(str));
 
     CAMLreturn(Val_unit);
 }
