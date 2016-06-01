@@ -22,7 +22,7 @@
 #include <caml/memory.h>
 #include <caml/callback.h>
 
-static char *argv[] = { "mirage", NULL };
+static char *mirage_argv[] = { "mirage", NULL };
 
 CAMLprim value
 caml_block_domain(value v_until)
@@ -42,9 +42,15 @@ stub_evtchn_look_for_work(value v_unit)
     CAMLreturn(work_to_do);
 }
 
-void start_kernel(void)
+#define UNUSED(x) (void)(x)
+int start_kernel(int argc, char **argv)
 {
-  printf("Solo5: new bindings\n");
+    UNUSED(argc);
+    UNUSED(argv);
 
-  caml_startup(argv);
+    printf("Solo5: new bindings\n");
+
+    caml_startup(mirage_argv);
+
+    return 0;
 }
