@@ -24,6 +24,8 @@
 open Lwt
 
 external block_domain : [`Time] Time.Monotonic.t -> unit = "caml_block_domain"
+external interrupts_enable : unit -> unit = "caml_interrupts_enable"
+external interrupts_disable : unit -> unit = "caml_interrupts_disable"
 
 (* TODO let evtchn = Eventchn.init () *)
 
@@ -77,7 +79,9 @@ let run t =
           MProf.Trace.note_resume ();
           aux ()
         end in
-  aux ()
+  interrupts_disable ();
+  aux ();
+  interrupts_enable ()
 
 let () = at_exit (fun () -> run (call_hooks exit_hooks))
 let at_exit f = ignore (Lwt_sequence.add_l f exit_hooks)
