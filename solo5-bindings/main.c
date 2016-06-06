@@ -29,7 +29,23 @@ caml_block_domain(value v_until)
 {
   CAMLparam1(v_until);
   uint64_t until = (Int64_val(v_until));
-  while(solo5_clock_monotonic() < until);
+  solo5_cpu_block(until);
+  CAMLreturn(Val_unit);
+}
+
+CAMLprim value
+caml_interrupts_disable(value v_unit)
+{
+  CAMLparam1(v_unit);
+  solo5_interrupts_disable();
+  CAMLreturn(Val_unit);
+}
+
+CAMLprim value
+caml_interrupts_enable(value v_unit)
+{
+  CAMLparam1(v_unit);
+  solo5_interrupts_enable();
   CAMLreturn(Val_unit);
 }
 
