@@ -25,21 +25,14 @@
 static char *mirage_argv[] = { "mirage", NULL };
 
 CAMLprim value
-caml_block_domain(value v_until)
+caml_poll(value v_until)
 {
   CAMLparam1(v_until);
+  CAMLlocal1(work_to_do);
   uint64_t until = (Int64_val(v_until));
-  while(solo5_clock_monotonic() < until);
-  CAMLreturn(Val_unit);
-}
-
-CAMLprim value
-stub_evtchn_look_for_work(value v_unit)
-{
-    CAMLparam1(v_unit);
-    CAMLlocal1(work_to_do);
-    work_to_do = Val_bool(0);
-    CAMLreturn(work_to_do);
+  int rc = solo5_poll(until);
+  work_to_do = Val_bool(rc);
+  CAMLreturn(work_to_do);
 }
 
 #define UNUSED(x) (void)(x)
