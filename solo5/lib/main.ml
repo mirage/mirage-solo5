@@ -23,9 +23,7 @@
 
 open Lwt
 
-external block_domain : [`Time] Time.Monotonic.t -> unit = "caml_block_domain"
-
-(* TODO let evtchn = Eventchn.init () *)
+external poll : [`Time] Time.Monotonic.t -> bool = "caml_poll"
 
 let exit_hooks = Lwt_sequence.create ()
 let enter_hooks = Lwt_sequence.create ()
@@ -45,7 +43,13 @@ let rec call_hooks hooks  =
             return ()) in
         call_hooks hooks
 
-external look_for_work: unit -> bool = "stub_evtchn_look_for_work"
+(* Solo5 currently has an all-or-nothing interface to block and wait for I/O
+ * events, so we use a single condition variable to block threads which are
+ * waiting for work and wake them all up if I/O is possible.  This will need to
+ * be extended once solo5_poll() gains support for selecting events of
+ * interest. *)
+let work = Lwt_condition.create ()
+let wait_for_work () = Lwt_condition.wait work
 
 (* Execute one iteration and register a callback function *)
 let run t =
@@ -57,23 +61,22 @@ let run t =
     | Some () ->
         ()
     | None ->
-        if look_for_work () then begin
-          (* Some event channels have triggered, wake up threads
-           * and continue without blocking. *)
+        let timeout =
+          match Time.select_next () with
+          |None -> Time.Monotonic.(time () + of_seconds 86400.0) (* one day = 24 * 60 * 60 s *)
+          |Some tm -> tm
+        in
+        MProf.Trace.(note_hiatus Wait_for_work);
+        if poll timeout then begin
+          MProf.Trace.note_resume ();
           (* Call enter hooks. *)
           Lwt_sequence.iter_l (fun f -> f ()) enter_iter_hooks;
-          (* TODO Activations.run evtchn; *)
+          (* Some I/O is possible, wake up threads and continue. *)
+          Lwt_condition.broadcast work ();
           (* Call leave hooks. *)
           Lwt_sequence.iter_l (fun f -> f ()) exit_iter_hooks;
           aux ()
         end else begin
-          let timeout =
-            match Time.select_next () with
-            |None -> Time.Monotonic.(time () + of_seconds 86400.0) (* one day = 24 * 60 * 60 s *)
-            |Some tm -> tm
-          in
-          MProf.Trace.(note_hiatus Wait_for_work);
-          block_domain timeout;
           MProf.Trace.note_resume ();
           aux ()
         end in
