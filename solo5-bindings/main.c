@@ -21,8 +21,10 @@
 #include <caml/mlvalues.h>
 #include <caml/memory.h>
 #include <caml/callback.h>
+#include <caml/alloc.h>
 
-static char *mirage_argv[] = { "mirage", NULL };
+static char *unused_argv[] = { "mirage", NULL };
+static char *solo5_cmdline = "";
 
 CAMLprim value
 caml_poll(value v_until)
@@ -35,15 +37,22 @@ caml_poll(value v_until)
   CAMLreturn(work_to_do);
 }
 
-#define UNUSED(x) (void)(x)
-int start_kernel(int argc, char **argv)
+CAMLprim value
+caml_get_cmdline(value unit)
 {
-    UNUSED(argc);
-    UNUSED(argv);
+    CAMLparam1(unit);
+    CAMLlocal1(result);
 
+    result = caml_copy_string(solo5_cmdline);
+    CAMLreturn(result);
+}
+
+int start_kernel(char *cmdline)
+{
     printf("Solo5: new bindings\n");
 
-    caml_startup(mirage_argv);
+    solo5_cmdline = cmdline;
+    caml_startup(unused_argv);
 
     return 0;
 }
