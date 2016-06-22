@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Anil Madhavapeddy <anil@recoil.org>
+ * Copyright (c) 2016 Martin Lucina <martin.lucina@docker.com>
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -29,12 +29,14 @@ static char *solo5_cmdline = "";
 CAMLprim value
 caml_poll(value v_until)
 {
-  CAMLparam1(v_until);
-  CAMLlocal1(work_to_do);
-  uint64_t until = (Int64_val(v_until));
-  int rc = solo5_poll(until);
-  work_to_do = Val_bool(rc);
-  CAMLreturn(work_to_do);
+    CAMLparam1(v_until);
+    CAMLlocal1(work_to_do);
+
+    uint64_t until = (Int64_val(v_until));
+    int rc = solo5_poll(until);
+
+    work_to_do = Val_bool(rc);
+    CAMLreturn(work_to_do);
 }
 
 CAMLprim value
@@ -47,7 +49,7 @@ caml_get_cmdline(value unit)
     CAMLreturn(result);
 }
 
-int start_kernel(char *cmdline)
+int solo5_app_main(char *cmdline)
 {
     printf("Solo5: new bindings\n");
 
