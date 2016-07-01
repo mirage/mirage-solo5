@@ -1,7 +1,7 @@
 OPAM_DIR=$(shell opam config var prefix)
 
 FREESTANDING_CFLAGS=$(shell PKG_CONFIG_PATH=$(OPAM_DIR)/lib/pkgconfig pkg-config ocaml-freestanding --cflags)
-CC=gcc
+CC?=cc
 CFLAGS=-O2 -g -Wall -Werror $(FREESTANDING_CFLAGS)
 
 OBJS=\
