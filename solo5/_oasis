@@ -1,0 +1,18 @@
+OASISFormat: 0.4
+Name:        mirage-solo5
+Version:     2.4.1
+Synopsis:    Library support for the Mirage/Solo5 backend
+Authors:     Anil Madhavapeddy, Dave Scott, Thomas Gazagnaire, Thomas Leonard, Dan Williams
+License:     ISC
+Plugins:     META (0.4), DevFiles (0.4)
+BuildTools:  ocamlbuild
+
+Library "OS"
+  Path: lib
+  Findlibname: mirage-solo5
+  Pack: true
+#  Modules: Activations, Device_state, Env, Lifecycle, Main, MM, Sched, Start_info, Time, Xenctrl, Xs
+  Modules: Env, Lifecycle, Main, MM, Time
+  BuildDepends:	lwt,cstruct,shared-memory-ring,shared-memory-ring.lwt,
+                shared-memory-ring.console,mirage-types,mirage-clock-xen,
+                io-page,mirage-profile
