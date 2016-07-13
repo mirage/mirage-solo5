@@ -4,19 +4,21 @@ authors:      "The MirageOS team"
 homepage:     "https://github.com/mirage/mirage-platform"
 bug-reports:  "https://github.com/mirage/mirage-platform/issues/"
 dev-repo:     "https://github.com/mirage/mirage-platform.git"
-license:      "part ISC, part LGPL-2.1 with OCaml linking exception, part 3-clause BSD"
-build:   [make "unix-build"]
-install: [make "unix-install"   "PREFIX=%{prefix}%"]
-remove:  [make "unix-uninstall" "PREFIX=%{prefix}%"]
+license:      "ISC"
+
+build:   [make "solo5-build"]
+install: [make "solo5-install"   "PREFIX=%{prefix}%"]
+remove:  [make "solo5-uninstall" "PREFIX=%{prefix}%"]
 
 depends: [
-  "ocamlfind" {build}
-  "ocamlbuild" {build}
   "cstruct" {>= "1.0.1"}
-  "lwt" {>= "2.4.3"}
+  "ocamlfind"
   "io-page" {>= "1.5.0"}
-  "mirage-clock-unix" {>= "1.0.0"}
+  "mirage-clock-xen" {>= "1.0.0"}
+  "lwt" {>= "2.4.3"}
   "shared-memory-ring" {>= "1.0.0"}
+  "conf-pkg-config"
   "mirage-profile" {>= "0.3"}
+  "ocaml-freestanding"
 ]
-available: [ocaml-version >= "4.01.0"]
+available: [ ocaml-version >= "4.01.0" ]
