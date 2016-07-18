@@ -14,5 +14,5 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  *)
 
-(* TODO: pass in arguments to VM via Xenstore *)
+(* TODO: Is this interface still required? We use Bootvar.argv for Solo5. *)
 let argv () = Lwt.return [||]

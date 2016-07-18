@@ -1,9 +1,9 @@
 opam-version: "1.2"
-maintainer:   "anil@recoil.org"
-authors:      "The MirageOS team"
-homepage:     "https://github.com/mirage/mirage-platform"
-bug-reports:  "https://github.com/mirage/mirage-platform/issues/"
-dev-repo:     "https://github.com/mirage/mirage-platform.git"
+maintainer:   "martin@lucina.net"
+homepage:     "https://github.com/mirage/mirage-solo5"
+bug-reports:  "https://github.com/mirage/mirage-solo5/issues/"
+dev-repo:     "https://github.com/mirage/mirage-solo5.git"
+authors:       [ "Anil Madhavapeddy <anil@recoil.org>" "Dan Williams <djwillia@us.ibm.com>" "Martin Lucina <martin@lucina.net>" ]
 license:      "ISC"
 
 build:   [make "solo5-build"]
@@ -11,13 +11,9 @@ install: [make "solo5-install"   "PREFIX=%{prefix}%"]
 remove:  [make "solo5-uninstall" "PREFIX=%{prefix}%"]
 
 depends: [
-  "cstruct" {>= "1.0.1"}
   "ocamlfind"
-  "io-page" {>= "1.5.0"}
-  "mirage-clock-xen" {>= "1.0.0"}
+  "cstruct" {>= "1.0.1"}
   "lwt" {>= "2.4.3"}
-  "shared-memory-ring" {>= "1.0.0"}
-  "conf-pkg-config"
   "mirage-profile" {>= "0.3"}
   "ocaml-freestanding"
 ]
