@@ -6,6 +6,7 @@ CFLAGS=-O2 -g -Wall -Werror $(FREESTANDING_CFLAGS)
 
 OBJS=\
 alloc_pages_stubs.o \
+atomic_stubs.o \
 barrier_stubs.o \
 checksum_stubs.o \
 clock_stubs.o \
