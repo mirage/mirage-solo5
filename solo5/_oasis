@@ -12,4 +12,4 @@ Library "OS"
   Findlibname: mirage-solo5
   Pack: true
   Modules: Env, Lifecycle, Main, MM, Time
-  BuildDepends:	lwt,cstruct,mirage-profile
+  BuildDepends:	lwt,cstruct,mirage-profile,logs
