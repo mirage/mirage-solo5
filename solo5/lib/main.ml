@@ -51,13 +51,17 @@ let rec call_hooks hooks  =
 let work = Lwt_condition.create ()
 let wait_for_work () = Lwt_condition.wait work
 
+let err exn =
+  Logs.err (fun m -> m "main: %s\n%s" (Printexc.to_string exn) (Printexc.get_backtrace ())) ;
+  exit 1
+
 (* Execute one iteration and register a callback function *)
 let run t =
   let t = call_hooks enter_hooks <&> t in
   let rec aux () =
     Lwt.wakeup_paused ();
     Time.restart_threads Time.Monotonic.time;
-    match Lwt.poll t with
+    match (try Lwt.poll t with exn -> err exn) with
     | Some () ->
         ()
     | None ->
