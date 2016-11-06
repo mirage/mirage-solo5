@@ -67,7 +67,7 @@ let sleep_queue = ref SleepQueue.empty
 let new_sleeps = ref []
 
 let sleep_ns d =
-  let (res, w) = MProf.Trace.named_task "sleep" in
+  let (res, w) = Lwt.task () in
   let t = Monotonic.(time () + of_nanoseconds d) in
   let sleeper = { time = t; canceled = false; thread = w } in
   new_sleeps := sleeper :: !new_sleeps;

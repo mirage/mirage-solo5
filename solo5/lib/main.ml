@@ -70,9 +70,7 @@ let run t =
           |None -> Time.Monotonic.(time () + of_nanoseconds 86_400_000_000_000L) (* one day = 24 * 60 * 60 s *)
           |Some tm -> tm
         in
-        MProf.Trace.(note_hiatus Wait_for_work);
         if poll timeout then begin
-          MProf.Trace.note_resume ();
           (* Call enter hooks. *)
           Lwt_sequence.iter_l (fun f -> f ()) enter_iter_hooks;
           (* Some I/O is possible, wake up threads and continue. *)
@@ -81,7 +79,6 @@ let run t =
           Lwt_sequence.iter_l (fun f -> f ()) exit_iter_hooks;
           aux ()
         end else begin
-          MProf.Trace.note_resume ();
           aux ()
         end in
   aux ()
