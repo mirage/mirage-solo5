@@ -1,8 +1,8 @@
 # OASIS_START
-# DO NOT EDIT (digest: 6781bb72873230a934142030c397ed3a)
+# DO NOT EDIT (digest: 921c47fc7712637e50f915687af70c4f)
 version = "0.1.1"
 description = "Library support for the Mirage/Solo5 backend"
-requires = "lwt cstruct mirage-profile logs"
+requires = "lwt cstruct logs"
 archive(byte) = "OS.cma"
 archive(byte, plugin) = "OS.cma"
 archive(native) = "OS.cmxa"
