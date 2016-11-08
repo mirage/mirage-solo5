@@ -3,5 +3,6 @@ true: warn(A-44)
 
 <myocamlbuild.ml>: package(ocb-stubblr)
 <lib/*>: package(lwt cstruct logs)
+<lib/*.cm{x,o}> and not <lib/oS.cmx>: for-pack(OS)
 <lib/native/*.c>: pkg-config(ocaml-freestanding)
 <**/*.c> : ccopt(-O2 -std=c99 -Wall -Werror)
