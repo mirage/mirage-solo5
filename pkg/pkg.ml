@@ -12,6 +12,6 @@ let opams = [
 
 let () =
   Pkg.describe ~build:(Pkg.build ~cmd()) ~opams "mirage-solo5" @@ fun c ->
-    Ok [ Pkg.mllib "lib/mirage-solo5.mllib" ;
+    Ok [ Pkg.mllib "lib/oS.mllib" ;
          Pkg.clib "lib/libmirage-solo5_bindings.clib";
          Pkg.share_root ~dst:"pkgconfig/" "lib/bindings/mirage-solo5.pc" ]
