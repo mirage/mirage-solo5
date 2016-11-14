@@ -6,16 +6,16 @@ dev-repo:     "https://github.com/mirage/mirage-solo5.git"
 authors:       [ "Anil Madhavapeddy <anil@recoil.org>" "Dan Williams <djwillia@us.ibm.com>" "Martin Lucina <martin@lucina.net>" ]
 license:      "ISC"
 
-build:   [make "solo5-build"]
-install: [make "solo5-install"   "PREFIX=%{prefix}%"]
-remove:  [make "solo5-uninstall" "PREFIX=%{prefix}%"]
+build:   [ "ocaml" "pkg/pkg.ml" "build" "--pinned" "%{pinned}%" ]
 
 depends: [
   "ocamlfind" {build}
   "ocamlbuild" {build}
+  "topkg" {build & >= "0.7.6"}
+  "ocb-stubblr" {build}
   "cstruct" {>= "1.0.1"}
   "lwt" {>= "2.4.3"}
   "ocaml-freestanding"
   "logs"
 ]
-available: [ ocaml-version >= "4.01.0" ]
+available: [ ocaml-version >= "4.02.3" ]
