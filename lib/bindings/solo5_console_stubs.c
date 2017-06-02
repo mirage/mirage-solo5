@@ -25,7 +25,8 @@
 #include <caml/callback.h>
 #include <caml/bigarray.h>
 
-CAMLprim value stub_console_write(value arg)
+CAMLprim value
+stub_console_write(value arg)
 {
     CAMLparam1(arg);
 

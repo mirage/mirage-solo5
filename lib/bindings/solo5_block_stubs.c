@@ -27,7 +27,8 @@
 #include <caml/callback.h>
 #include <caml/bigarray.h>
 
-CAMLprim value stub_blk_write(value sector, value buffer, value num)
+CAMLprim value
+stub_blk_write(value sector, value buffer, value num)
 {
     CAMLparam3(sector, buffer, num);
     uint64_t sec = Int64_val(sector);
@@ -40,7 +41,8 @@ CAMLprim value stub_blk_write(value sector, value buffer, value num)
     CAMLreturn(Val_bool(!ret));
 }
 
-CAMLprim value stub_blk_read(value sector, value buffer, value num)
+CAMLprim value
+stub_blk_read(value sector, value buffer, value num)
 {
     CAMLparam3(sector, buffer, num);
     uint64_t sec = Int64_val(sector);
@@ -53,19 +55,22 @@ CAMLprim value stub_blk_read(value sector, value buffer, value num)
     CAMLreturn(Val_bool(!ret));
 }
 
-CAMLprim value stub_blk_sector_size(value unit)
+CAMLprim value
+stub_blk_sector_size(value unit)
 {
     CAMLparam1(unit);
     CAMLreturn(Val_int(solo5_blk_sector_size()));
 }
 
-CAMLprim value stub_blk_sectors(value unit)
+CAMLprim value
+stub_blk_sectors(value unit)
 {
     CAMLparam1(unit);
     CAMLreturn(caml_copy_int64(solo5_blk_sectors()));
 }
 
-CAMLprim value stub_blk_rw(value unit)
+CAMLprim value
+stub_blk_rw(value unit)
 {
     CAMLparam1(unit);
     CAMLreturn(Val_bool(solo5_blk_rw()));

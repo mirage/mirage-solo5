@@ -27,13 +27,15 @@
 #include <caml/callback.h>
 #include <caml/bigarray.h>
 
-CAMLprim value stub_net_mac(value unit)
+CAMLprim value
+stub_net_mac(value unit)
 {
     CAMLparam1(unit);
     CAMLreturn(caml_copy_string(solo5_net_mac_str()));
 }
 
-CAMLprim value stub_net_read(value buffer, value num)
+CAMLprim value
+stub_net_read(value buffer, value num)
 {
     CAMLparam2(buffer, num);
     uint8_t *data = Caml_ba_data_val(buffer);
@@ -49,7 +51,8 @@ CAMLprim value stub_net_read(value buffer, value num)
         CAMLreturn(Val_int(n));
 }
 
-CAMLprim value stub_net_write(value buffer, value num)
+CAMLprim value
+stub_net_write(value buffer, value num)
 {
     CAMLparam2(buffer, num);
     uint8_t *data = Caml_ba_data_val(buffer);
