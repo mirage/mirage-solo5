@@ -16,8 +16,6 @@
 
 #include "solo5.h"
 
-#include <stdio.h>
-
 #include <caml/mlvalues.h>
 #include <caml/memory.h>
 #include <caml/callback.h>
@@ -51,8 +49,6 @@ caml_get_cmdline(value unit)
 
 int solo5_app_main(char *cmdline)
 {
-    printf("Solo5: new bindings\n");
-
     solo5_cmdline = cmdline;
     caml_startup(unused_argv);
 
