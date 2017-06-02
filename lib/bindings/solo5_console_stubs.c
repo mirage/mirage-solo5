@@ -18,8 +18,6 @@
 
 #include "solo5.h"
 
-#include <string.h>
-
 #include <caml/alloc.h>
 #include <caml/memory.h>
 #include <caml/signals.h>
@@ -27,12 +25,10 @@
 #include <caml/callback.h>
 #include <caml/bigarray.h>
 
-
-CAMLprim value stub_console_write(value arg) {
+CAMLprim value stub_console_write(value arg)
+{
     CAMLparam1(arg);
 
-    const char *str = String_val(arg);
-    solo5_console_write(str, strlen(str));
-
+    solo5_console_write(String_val(arg), caml_string_length(arg));
     CAMLreturn(Val_unit);
 }
