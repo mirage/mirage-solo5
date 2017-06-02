@@ -27,12 +27,14 @@
 #include <caml/callback.h>
 #include <caml/bigarray.h>
 
-CAMLprim value stub_net_mac(value unit) {
+CAMLprim value stub_net_mac(value unit)
+{
     CAMLparam1(unit);
     CAMLreturn(caml_copy_string(solo5_net_mac_str()));
 }
 
-CAMLprim value stub_net_read(value buffer, value num) {
+CAMLprim value stub_net_read(value buffer, value num)
+{
     CAMLparam2(buffer, num);
     uint8_t *data = Caml_ba_data_val(buffer);
     int n = Int_val(num);
@@ -41,13 +43,14 @@ CAMLprim value stub_net_read(value buffer, value num) {
     assert(Caml_ba_array_val(buffer)->num_dims == 1);
     
     ret = solo5_net_read_sync(data, &n);
-    if ( ret )
+    if (ret != 0)
         CAMLreturn(Val_int(-1));
-    
-    CAMLreturn(Val_int(n));
+    else
+        CAMLreturn(Val_int(n));
 }
 
-CAMLprim value stub_net_write(value buffer, value num) {
+CAMLprim value stub_net_write(value buffer, value num)
+{
     CAMLparam2(buffer, num);
     uint8_t *data = Caml_ba_data_val(buffer);
     int n = Int_val(num);
@@ -56,8 +59,8 @@ CAMLprim value stub_net_write(value buffer, value num) {
     assert(Caml_ba_array_val(buffer)->num_dims == 1);
 
     ret = solo5_net_write_sync(data, n);
-    if ( ret )
+    if (ret != 0)
         CAMLreturn(Val_int(-1));
-
-    CAMLreturn(Val_int(n));
+    else
+        CAMLreturn(Val_int(n));
 }
