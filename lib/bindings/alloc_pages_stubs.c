@@ -41,7 +41,7 @@ caml_alloc_pages(value did_gc, value n_pages)
   void* block = malloc(len);
   if (block == NULL) {
     if (Bool_val(did_gc))
-      printf("Io_page: memalign(%d, %zu) failed, even after GC.\n", PAGE_SIZE, len);
+      printf("ERROR: Io_page: memalign(%d, %zu) failed, even after GC.\n", PAGE_SIZE, len);
     caml_raise_out_of_memory();
   }
   /* Explicitly zero the page before returning it */

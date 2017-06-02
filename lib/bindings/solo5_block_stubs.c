@@ -19,7 +19,6 @@
 #include "solo5.h"
 
 #include <assert.h>
-#include <stdio.h>
 
 #include <caml/alloc.h>
 #include <caml/memory.h>
@@ -28,75 +27,51 @@
 #include <caml/callback.h>
 #include <caml/bigarray.h>
 
-CAMLprim value stub_blk_write(value sector, value buffer, value num) {
+CAMLprim value
+stub_blk_write(value sector, value buffer, value num)
+{
     CAMLparam3(sector, buffer, num);
     uint64_t sec = Int64_val(sector);
     uint8_t *data = Caml_ba_data_val(buffer);
     int n = Int_val(num);
-    int ret = 0;
+    int ret;
 
     assert(Caml_ba_array_val(buffer)->num_dims == 1);
-	
-    //printf("Solo5 blk write: sec=%d num=%d\n", sec, n);
-
     ret = solo5_blk_write_sync(sec, data, n);
-    if ( ret ) 
-        printf("blk write failed... %d to sector=%d\n", n, sec);
-
-#if 0
-    {
-        int i;
-        for (i = 0; i < n; i++) {
-            printf("%02x ", (uint8_t) data[i]);
-            if ( i % 16 == 15 )
-                printf("\n");
-        }
-        printf("\n");
-    }
-#endif
-
     CAMLreturn(Val_bool(!ret));
 }
 
-CAMLprim value stub_blk_read(value sector, value buffer, value num) {
+CAMLprim value
+stub_blk_read(value sector, value buffer, value num)
+{
     CAMLparam3(sector, buffer, num);
     uint64_t sec = Int64_val(sector);
     uint8_t *data = Caml_ba_data_val(buffer);
     int n = Int_val(num);
-    int ret = 0;
+    int ret;
 
     assert(Caml_ba_array_val(buffer)->num_dims == 1);
-
-    //printf("Solo5 blk read: sec=%d num=%d\n", sec, n);
-
     ret = solo5_blk_read_sync(sec, data, &n);
-    if ( ret )
-        printf("virtio read failed... %d from sector=%d\n", n, sec);
-
-#if 0
-    {
-        int i;
-        for (i = 0; i < n; i++) {
-            printf("%02x ", (uint8_t) data[i]);
-            if ( i % 16 == 15 )
-                printf("\n");
-        }
-        printf("\n");
-    }
-#endif
-
     CAMLreturn(Val_bool(!ret));
 }
 
-CAMLprim value stub_blk_sector_size(value unit) {
+CAMLprim value
+stub_blk_sector_size(value unit)
+{
     CAMLparam1(unit);
     CAMLreturn(Val_int(solo5_blk_sector_size()));
 }
-CAMLprim value stub_blk_sectors(value unit) {
+
+CAMLprim value
+stub_blk_sectors(value unit)
+{
     CAMLparam1(unit);
     CAMLreturn(caml_copy_int64(solo5_blk_sectors()));
 }
-CAMLprim value stub_blk_rw(value unit) {
+
+CAMLprim value
+stub_blk_rw(value unit)
+{
     CAMLparam1(unit);
     CAMLreturn(Val_bool(solo5_blk_rw()));
 }

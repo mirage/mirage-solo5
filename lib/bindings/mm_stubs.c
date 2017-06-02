@@ -17,6 +17,7 @@
 #include "solo5.h"
 
 #include <stdio.h>
+#include <stdlib.h>
 
 #include <caml/mlvalues.h>
 
@@ -24,16 +25,14 @@ CAMLprim value
 stub_heap_get_pages_total(__attribute__((unused)) value unit) // noalloc
 {
 	//return Val_long(minios_heap_pages_total);
-	printf("STUB: %s unimplemented, aborting", __func__);
-        solo5_exit();
-	return Val_long(0);
+	printf("STUB: %s unimplemented, aborting\n", __func__);
+        abort();
 }
 
 CAMLprim value
 stub_heap_get_pages_used(__attribute__((unused)) value unit) // noalloc
 {
 	//return Val_long(minios_heap_pages_used);
-	printf("STUB: %s unimplemented, aborting", __func__);
-        solo5_exit();
-	return Val_long(0);
+	printf("STUB: %s unimplemented, aborting\n", __func__);
+        abort();
 }

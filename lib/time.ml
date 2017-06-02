@@ -53,7 +53,7 @@ type sleep = {
 module SleepQueue =
   Lwt_pqueue.Make (struct
                      type t = sleep
-                     let compare { time = t1 } { time = t2 } = compare t1 t2
+                     let compare { time = t1; _ } { time = t2; _ } = compare t1 t2
                    end)
 
 (* Threads waiting for a timeout to expire: *)
@@ -85,10 +85,10 @@ let in_the_past now t =
 
 let rec restart_threads now =
   match SleepQueue.lookup_min !sleep_queue with
-    | Some{ canceled = true } ->
+    | Some{ canceled = true; _ } ->
         sleep_queue := SleepQueue.remove_min !sleep_queue;
         restart_threads now
-    | Some{ time = time; thread = thread } when in_the_past now time ->
+    | Some{ time = time; thread = thread; _ } when in_the_past now time ->
         sleep_queue := SleepQueue.remove_min !sleep_queue;
         Lwt.wakeup thread ();
         restart_threads now
@@ -106,10 +106,10 @@ let min_timeout a b = match a, b with
 
 let rec get_next_timeout () =
   match SleepQueue.lookup_min !sleep_queue with
-    | Some{ canceled = true } ->
+    | Some{ canceled = true; _ } ->
         sleep_queue := SleepQueue.remove_min !sleep_queue;
         get_next_timeout ()
-    | Some{ time = time } ->
+    | Some{ time = time; _ } ->
         Some time
     | None ->
         None

@@ -39,7 +39,7 @@ let rec call_hooks hooks  =
         let _ =
           Lwt.catch f
           (fun exn ->
-            Printf.printf "call_hooks: exn %s\n%!" (Printexc.to_string exn);
+            Printf.printf "ERROR: call_hooks(): Unhandled exception: %s\n%!" (Printexc.to_string exn);
             return ()) in
         call_hooks hooks
 
