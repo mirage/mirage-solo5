@@ -1,14 +1,3 @@
-module Env : sig
-
-(** Unikernel environment interface. *)
-
-val argv: unit -> (string array) Lwt.t
-(** The command line arguments given to the unikernel. The first
-    element is the name of the unikernel binary. The following
-    elements are the arguments passed to the unikernel. *)
-
-end
-
 module Lifecycle : sig
 
 val await_shutdown_request :
