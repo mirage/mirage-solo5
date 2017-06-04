@@ -29,7 +29,8 @@ CAMLprim value
 stub_console_write(value arg)
 {
     CAMLparam1(arg);
+    int ret;
 
-    solo5_console_write(String_val(arg), caml_string_length(arg));
-    CAMLreturn(Val_unit);
+    ret = solo5_console_write(String_val(arg), caml_string_length(arg));
+    CAMLreturn(Val_int(ret));
 }
