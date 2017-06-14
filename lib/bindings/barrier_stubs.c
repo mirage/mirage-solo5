@@ -14,11 +14,6 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-#if 0
-#include <stdint.h>
-#include <assert.h>
-#endif
-
 #include "solo5.h"
 
 #include <caml/mlvalues.h>
@@ -26,21 +21,23 @@
 #include <caml/memory.h>
 #include <caml/bigarray.h>
 
-#if 0
-#include <mini-os/os.h>
+#if defined(__x86_64__)
+#define mb()     __asm__ __volatile__("mfence" ::: "memory")
+#define rmb()    __asm__ __volatile__("lfence" ::: "memory")
+#define wmb()    __asm__ __volatile__("sfence" ::: "memory")
+#elif defined(__aarch64__)
+#define dsb(opt) __asm__ __volatile__("dsb " #opt ::: "memory")
+#define mb()     dsb(sy)
+#define rmb()    dsb(ld)
+#define wmb()    dsb(st)
+#else
+#error Unsupported architecture
 #endif
-
-#define mb()    __asm__ __volatile__ ("mfence":::"memory")
-#define rmb()   __asm__ __volatile__ ("lfence":::"memory")
-#define wmb()	__asm__ __volatile__ ("sfence" ::: "memory") /* From CONFIG_UNORDERED_IO (linux) */
-
-#define xen_mb() mb()
-#define xen_wmb() wmb()
 
 CAMLprim value
 caml_memory_barrier()
 {
-  xen_mb();
+  mb();
   return Val_unit;
 }
 
