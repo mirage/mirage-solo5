@@ -31,7 +31,7 @@
    call free() whenever all sub-bigarrays are unreachable.
  */
 CAMLprim value
-caml_alloc_pages(value did_gc, value n_pages)
+mirage_alloc_pages(value did_gc, value n_pages)
 {
   CAMLparam2(did_gc, n_pages);
   size_t len = Int_val(n_pages) * PAGE_SIZE;
@@ -66,7 +66,7 @@ caml_alloc_pages(value did_gc, value n_pages)
 }
 
 CAMLprim value
-caml_get_addr(value page)
+mirage_get_addr(value page)
 {
   CAMLparam1(page);
   CAMLlocal1(nativeint);
