@@ -64,3 +64,13 @@ caml_alloc_pages(value did_gc, value n_pages)
   CAMLreturn(caml_ba_alloc_dims(CAML_BA_UINT8 | CAML_BA_C_LAYOUT | CAML_BA_MANAGED, 1, block, len));
 #endif
 }
+
+CAMLprim value
+caml_get_addr(value page)
+{
+  CAMLparam1(page);
+  CAMLlocal1(nativeint);
+  void *data = Caml_ba_data_val(page);
+  nativeint = caml_copy_nativeint((intnat) data);
+  CAMLreturn(nativeint);
+}
