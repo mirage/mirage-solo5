@@ -2,7 +2,8 @@
 
 * Use [@@noalloc] rather than "noalloc"
 * Fix warnings, formatting and cleanup
-* Test with OCaml 4.04
+* Require OCaml 4.03
+* Test also with OCaml 4.04
 * Rename caml_{alloc_pages,get_addr} to mirage_{alloc_pages,get_addr}
   to avoid using the OCaml compiler namespace. This corresponds with
   [mirage/io-page#48]
