@@ -23,6 +23,9 @@ depends: [
   "ocaml-freestanding"
   "logs"
 ]
+conflicts: [
+  "io-page" {< "2.0.0"}
+]
 available: [
   ocaml-version >= "4.03.0" & (arch = "x86_64" | arch = "amd64" | arch = "aarch64")
 ]
