@@ -16,13 +16,14 @@
 
 #include "solo5.h"
 
+#define CAML_NAME_SPACE
 #include <caml/mlvalues.h>
 #include <caml/memory.h>
 #include <caml/callback.h>
 #include <caml/alloc.h>
 
 static char *unused_argv[] = { "mirage", NULL };
-static char *solo5_cmdline = "";
+static const char *solo5_cmdline = "";
 
 CAMLprim value
 caml_poll(value v_until)
@@ -47,9 +48,12 @@ caml_get_cmdline(value unit)
     CAMLreturn(result);
 }
 
-int solo5_app_main(char *cmdline)
+extern void _nolibc_init(uintptr_t, size_t);
+
+int solo5_app_main(const struct solo5_boot_info *bi)
 {
-    solo5_cmdline = cmdline;
+    solo5_cmdline = bi->cmdline;
+    _nolibc_init(bi->heap_start, bi->heap_size);
     caml_startup(unused_argv);
 
     return 0;
