@@ -26,34 +26,30 @@ static char *unused_argv[] = { "mirage", NULL };
 static const char *solo5_cmdline = "";
 
 CAMLprim value
-caml_poll(value v_until)
+mirage_solo5_yield(value v_deadline)
 {
-    CAMLparam1(v_until);
-    CAMLlocal1(work_to_do);
+    CAMLparam1(v_deadline);
 
-    uint64_t until = (Int64_val(v_until));
-    int rc = solo5_poll(until);
+    solo5_time_t deadline = (Int64_val(v_deadline));
+    bool rc = solo5_yield(deadline);
 
-    work_to_do = Val_bool(rc);
-    CAMLreturn(work_to_do);
+    CAMLreturn(Val_bool(rc));
 }
 
 CAMLprim value
-caml_get_cmdline(value unit)
+mirage_solo5_get_cmdline(value unit)
 {
     CAMLparam1(unit);
-    CAMLlocal1(result);
 
-    result = caml_copy_string(solo5_cmdline);
-    CAMLreturn(result);
+    CAMLreturn(caml_copy_string(solo5_cmdline));
 }
 
 extern void _nolibc_init(uintptr_t, size_t);
 
-int solo5_app_main(const struct solo5_boot_info *bi)
+int solo5_app_main(const struct solo5_start_info *si)
 {
-    solo5_cmdline = bi->cmdline;
-    _nolibc_init(bi->heap_start, bi->heap_size);
+    solo5_cmdline = si->cmdline;
+    _nolibc_init(si->heap_start, si->heap_size);
     caml_startup(unused_argv);
 
     return 0;

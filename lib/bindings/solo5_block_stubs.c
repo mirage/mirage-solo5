@@ -1,5 +1,5 @@
-/* Copyright (c) 2015, IBM 
- * Author(s): Dan Williams <djwillia@us.ibm.com> 
+/* Copyright (c) 2015, IBM
+ * Author(s): Dan Williams <djwillia@us.ibm.com>
  *
  * Permission to use, copy, modify, and/or distribute this software
  * for any purpose with or without fee is hereby granted, provided
@@ -18,8 +18,7 @@
 
 #include "solo5.h"
 
-#include <assert.h>
-
+#define CAML_NAME_SPACE
 #include <caml/alloc.h>
 #include <caml/memory.h>
 #include <caml/signals.h>
@@ -28,50 +27,42 @@
 #include <caml/bigarray.h>
 
 CAMLprim value
-stub_blk_write(value sector, value buffer, value num)
+mirage_solo5_block_info(value v_unit)
 {
-    CAMLparam3(sector, buffer, num);
-    uint64_t sec = Int64_val(sector);
-    uint8_t *data = Caml_ba_data_val(buffer);
-    int n = Int_val(num);
-    int ret;
+    CAMLparam1(v_unit);
+    CAMLlocal1(v_result);
+    struct solo5_block_info bi;
 
-    assert(Caml_ba_array_val(buffer)->num_dims == 1);
-    ret = solo5_blk_write_sync(sec, data, n);
-    CAMLreturn(Val_bool(!ret));
+    solo5_block_info(&bi);
+    v_result = caml_alloc(2, 0);
+    Store_field(v_result, 0, caml_copy_int64(bi.capacity));
+    Store_field(v_result, 1, caml_copy_int64(bi.block_size));
+
+    CAMLreturn(v_result);
 }
 
 CAMLprim value
-stub_blk_read(value sector, value buffer, value num)
+mirage_solo5_block_read(value v_offset, value v_buf, value v_size)
 {
-    CAMLparam3(sector, buffer, num);
-    uint64_t sec = Int64_val(sector);
-    uint8_t *data = Caml_ba_data_val(buffer);
-    int n = Int_val(num);
-    int ret;
+    CAMLparam3(v_offset, v_buf, v_size);
+    solo5_off_t offset = Int64_val(v_offset);
+    uint8_t *buf = Caml_ba_data_val(v_buf);
+    size_t size = Long_val(v_size);
+    solo5_result_t result;
 
-    assert(Caml_ba_array_val(buffer)->num_dims == 1);
-    ret = solo5_blk_read_sync(sec, data, &n);
-    CAMLreturn(Val_bool(!ret));
+    result = solo5_block_read(offset, buf, size);
+    CAMLreturn(Val_int(result));
 }
 
 CAMLprim value
-stub_blk_sector_size(value unit)
+mirage_solo5_block_write(value v_offset, value v_buf, value v_size)
 {
-    CAMLparam1(unit);
-    CAMLreturn(Val_int(solo5_blk_sector_size()));
-}
+    CAMLparam3(v_offset, v_buf, v_size);
+    solo5_off_t offset = Int64_val(v_offset);
+    const uint8_t *buf = Caml_ba_data_val(v_buf);
+    size_t size = Long_val(v_size);
+    solo5_result_t result;
 
-CAMLprim value
-stub_blk_sectors(value unit)
-{
-    CAMLparam1(unit);
-    CAMLreturn(caml_copy_int64(solo5_blk_sectors()));
-}
-
-CAMLprim value
-stub_blk_rw(value unit)
-{
-    CAMLparam1(unit);
-    CAMLreturn(Val_bool(solo5_blk_rw()));
+    result = solo5_block_write(offset, buf, size);
+    CAMLreturn(Val_int(result));
 }

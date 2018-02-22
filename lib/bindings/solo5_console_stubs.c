@@ -18,6 +18,7 @@
 
 #include "solo5.h"
 
+#define CAML_NAME_SPACE
 #include <caml/alloc.h>
 #include <caml/memory.h>
 #include <caml/signals.h>
@@ -26,10 +27,12 @@
 #include <caml/bigarray.h>
 
 CAMLprim value
-stub_console_write(value arg)
+mirage_solo5_console_write(value v_buf, value v_size)
 {
-    CAMLparam1(arg);
+    CAMLparam2(v_buf, v_size);
+    const char *buf = Caml_ba_data_val(v_buf);
+    size_t size = Long_val(v_size);
 
-    solo5_console_write(String_val(arg), caml_string_length(arg));
+    solo5_console_write(buf, size);
     CAMLreturn(Val_unit);
 }
