@@ -32,7 +32,7 @@ caml_poll(value v_until)
     CAMLlocal1(work_to_do);
 
     uint64_t until = (Int64_val(v_until));
-    int rc = solo5_poll(until);
+    int rc = solo5_yield(until);
 
     work_to_do = Val_bool(rc);
     CAMLreturn(work_to_do);
