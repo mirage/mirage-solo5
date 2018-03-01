@@ -31,7 +31,10 @@ CAMLprim value
 stub_net_mac(value unit)
 {
     CAMLparam1(unit);
-    CAMLreturn(caml_copy_string(solo5_net_mac_str()));
+    struct solo5_net_info info;
+
+    solo5_net_info(&info);
+    CAMLreturn(caml_copy_string((char *) info.mac_address));
 }
 
 CAMLprim value
@@ -39,12 +42,12 @@ stub_net_read(value buffer, value num)
 {
     CAMLparam2(buffer, num);
     uint8_t *data = Caml_ba_data_val(buffer);
-    int n = Int_val(num);
+    size_t n = Int_val(num);
     int ret;
     
     assert(Caml_ba_array_val(buffer)->num_dims == 1);
     
-    ret = solo5_net_read_sync(data, &n);
+    ret = solo5_net_read(data, Caml_ba_array_val(buffer)->dim[0], &n);
     if (ret != 0)
         CAMLreturn(Val_int(-1));
     else
@@ -61,7 +64,7 @@ stub_net_write(value buffer, value num)
 
     assert(Caml_ba_array_val(buffer)->num_dims == 1);
 
-    ret = solo5_net_write_sync(data, n);
+    ret = solo5_net_write(data, n);
     if (ret != 0)
         CAMLreturn(Val_int(-1));
     else

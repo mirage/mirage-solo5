@@ -37,7 +37,7 @@ stub_blk_write(value sector, value buffer, value num)
     int ret;
 
     assert(Caml_ba_array_val(buffer)->num_dims == 1);
-    ret = solo5_blk_write_sync(sec, data, n);
+    ret = solo5_block_write(sec, data, n);
     CAMLreturn(Val_bool(!ret));
 }
 
@@ -51,7 +51,7 @@ stub_blk_read(value sector, value buffer, value num)
     int ret;
 
     assert(Caml_ba_array_val(buffer)->num_dims == 1);
-    ret = solo5_blk_read_sync(sec, data, &n);
+    ret = solo5_block_read(sec, data, n);
     CAMLreturn(Val_bool(!ret));
 }
 
@@ -59,19 +59,25 @@ CAMLprim value
 stub_blk_sector_size(value unit)
 {
     CAMLparam1(unit);
-    CAMLreturn(Val_int(solo5_blk_sector_size()));
+    struct solo5_block_info info;
+
+    solo5_block_info(&info);
+    CAMLreturn(Val_int(info.block_size));
 }
 
 CAMLprim value
 stub_blk_sectors(value unit)
 {
     CAMLparam1(unit);
-    CAMLreturn(caml_copy_int64(solo5_blk_sectors()));
+    struct solo5_block_info info;
+
+    solo5_block_info(&info);
+    CAMLreturn(Val_int(info.capacity));
 }
 
 CAMLprim value
 stub_blk_rw(value unit)
 {
     CAMLparam1(unit);
-    CAMLreturn(Val_bool(solo5_blk_rw()));
+    CAMLreturn(Val_bool(1));
 }
