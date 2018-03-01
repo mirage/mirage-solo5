@@ -59,19 +59,25 @@ CAMLprim value
 stub_blk_sector_size(value unit)
 {
     CAMLparam1(unit);
-    CAMLreturn(Val_int(solo5_blk_sector_size()));
+    struct solo5_block_info info;
+
+    solo5_block_info(&info);
+    CAMLreturn(Val_int(info.block_size));
 }
 
 CAMLprim value
 stub_blk_sectors(value unit)
 {
     CAMLparam1(unit);
-    CAMLreturn(caml_copy_int64(solo5_blk_sectors()));
+    struct solo5_block_info info;
+
+    solo5_block_info(&info);
+    CAMLreturn(Val_int(info.capacity));
 }
 
 CAMLprim value
 stub_blk_rw(value unit)
 {
     CAMLparam1(unit);
-    CAMLreturn(Val_bool(solo5_blk_rw()));
+    CAMLreturn(Val_bool(1));
 }
