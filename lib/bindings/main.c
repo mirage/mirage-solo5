@@ -50,9 +50,9 @@ caml_get_cmdline(value unit)
 
 extern void _nolibc_init(uintptr_t, size_t);
 
-int solo5_app_main(const struct solo5_boot_info *bi)
+int solo5_app_main(const struct solo5_start_info *bi)
 {
-    solo5_cmdline = bi->cmdline;
+    solo5_cmdline = (char *) bi->cmdline;
     _nolibc_init(bi->heap_start, bi->heap_size);
     caml_startup(unused_argv);
 
