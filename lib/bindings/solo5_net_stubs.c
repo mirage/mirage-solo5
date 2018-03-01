@@ -31,7 +31,10 @@ CAMLprim value
 stub_net_mac(value unit)
 {
     CAMLparam1(unit);
-    CAMLreturn(caml_copy_string(solo5_net_mac_str()));
+    struct solo5_net_info info;
+
+    solo5_net_info(&info);
+    CAMLreturn(caml_copy_string((char *) info.mac_address));
 }
 
 CAMLprim value
