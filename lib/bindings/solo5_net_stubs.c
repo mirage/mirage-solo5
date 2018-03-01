@@ -64,7 +64,7 @@ stub_net_write(value buffer, value num)
 
     assert(Caml_ba_array_val(buffer)->num_dims == 1);
 
-    ret = solo5_net_write_sync(data, n);
+    ret = solo5_net_write(data, n);
     if (ret != 0)
         CAMLreturn(Val_int(-1));
     else
