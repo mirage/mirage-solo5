@@ -37,7 +37,7 @@ stub_blk_write(value sector, value buffer, value num)
     int ret;
 
     assert(Caml_ba_array_val(buffer)->num_dims == 1);
-    ret = solo5_blk_write_sync(sec, data, n);
+    ret = solo5_block_write(sec, data, n);
     CAMLreturn(Val_bool(!ret));
 }
 
@@ -51,7 +51,7 @@ stub_blk_read(value sector, value buffer, value num)
     int ret;
 
     assert(Caml_ba_array_val(buffer)->num_dims == 1);
-    ret = solo5_blk_read_sync(sec, data, &n);
+    ret = solo5_block_read(sec, data, n);
     CAMLreturn(Val_bool(!ret));
 }
 
