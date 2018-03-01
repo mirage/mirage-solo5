@@ -42,12 +42,12 @@ stub_net_read(value buffer, value num)
 {
     CAMLparam2(buffer, num);
     uint8_t *data = Caml_ba_data_val(buffer);
-    int n = Int_val(num);
+    size_t n = Int_val(num);
     int ret;
     
     assert(Caml_ba_array_val(buffer)->num_dims == 1);
     
-    ret = solo5_net_read_sync(data, &n);
+    ret = solo5_net_read(data, Caml_ba_array_val(buffer)->dim[0], &n);
     if (ret != 0)
         CAMLreturn(Val_int(-1));
     else
