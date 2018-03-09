@@ -37,7 +37,11 @@ mirage_solo5_net_info(value v_unit)
 
     solo5_net_info(&ni);
     v_mac_address = caml_alloc_string(SOLO5_NET_ALEN);
+#if defined(Bytes_val)
     memcpy(Bytes_val(v_mac_address), ni.mac_address, SOLO5_NET_ALEN);
+#else
+    memcpy(String_val(v_mac_address), ni.mac_address, SOLO5_NET_ALEN);
+#endif
     v_result = caml_alloc(2, 0);
     Store_field(v_result, 0, v_mac_address);
     Store_field(v_result, 1, Val_long(ni.mtu));
