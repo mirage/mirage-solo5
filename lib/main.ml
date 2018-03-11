@@ -23,7 +23,7 @@
 
 open Lwt
 
-external poll : [`Time] Time.Monotonic.t -> bool = "caml_poll"
+external solo5_yield : [`Time] Time.Monotonic.t -> bool = "mirage_solo5_yield"
 
 let exit_hooks = Lwt_sequence.create ()
 let enter_hooks = Lwt_sequence.create ()
@@ -46,7 +46,7 @@ let rec call_hooks hooks  =
 (* Solo5 currently has an all-or-nothing interface to block and wait for I/O
  * events, so we use a single condition variable to block threads which are
  * waiting for work and wake them all up if I/O is possible.  This will need to
- * be extended once solo5_poll() gains support for selecting events of
+ * be extended once solo5_yield() gains support for selecting events of
  * interest. *)
 let work = Lwt_condition.create ()
 let wait_for_work () = Lwt_condition.wait work
@@ -70,7 +70,7 @@ let run t =
           |None -> Time.Monotonic.(time () + of_nanoseconds 86_400_000_000_000L) (* one day = 24 * 60 * 60 s *)
           |Some tm -> tm
         in
-        if poll timeout then begin
+        if solo5_yield timeout then begin
           (* Call enter hooks. *)
           Lwt_sequence.iter_l (fun f -> f ()) enter_iter_hooks;
           (* Some I/O is possible, wake up threads and continue. *)

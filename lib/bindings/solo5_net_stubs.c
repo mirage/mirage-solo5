@@ -18,8 +18,9 @@
 
 #include "solo5.h"
 
-#include <assert.h>
+#include <string.h>
 
+#define CAML_NAME_SPACE
 #include <caml/alloc.h>
 #include <caml/memory.h>
 #include <caml/signals.h>
@@ -28,42 +29,51 @@
 #include <caml/bigarray.h>
 
 CAMLprim value
-stub_net_mac(value unit)
+mirage_solo5_net_info(value v_unit)
 {
-    CAMLparam1(unit);
-    CAMLreturn(caml_copy_string(solo5_net_mac_str()));
+    CAMLparam1(v_unit);
+    CAMLlocal2(v_mac_address, v_result);
+    struct solo5_net_info ni;
+
+    solo5_net_info(&ni);
+    v_mac_address = caml_alloc_string(SOLO5_NET_ALEN);
+#if defined(Bytes_val)
+    memcpy(Bytes_val(v_mac_address), ni.mac_address, SOLO5_NET_ALEN);
+#else
+    memcpy(String_val(v_mac_address), ni.mac_address, SOLO5_NET_ALEN);
+#endif
+    v_result = caml_alloc(2, 0);
+    Store_field(v_result, 0, v_mac_address);
+    Store_field(v_result, 1, Val_long(ni.mtu));
+
+    CAMLreturn(v_result);
 }
 
 CAMLprim value
-stub_net_read(value buffer, value num)
+mirage_solo5_net_read(value v_buf, value v_size)
 {
-    CAMLparam2(buffer, num);
-    uint8_t *data = Caml_ba_data_val(buffer);
-    int n = Int_val(num);
-    int ret;
+    CAMLparam2(v_buf, v_size);
+    CAMLlocal1(v_result);
+    uint8_t *buf = Caml_ba_data_val(v_buf);
+    size_t size = Long_val(v_size);
+    size_t read_size;
+    solo5_result_t result;
     
-    assert(Caml_ba_array_val(buffer)->num_dims == 1);
-    
-    ret = solo5_net_read_sync(data, &n);
-    if (ret != 0)
-        CAMLreturn(Val_int(-1));
-    else
-        CAMLreturn(Val_int(n));
+    result = solo5_net_read(buf, size, &read_size);
+    v_result = caml_alloc_tuple(2);
+    Field(v_result, 0) = Val_int(result);
+    Field(v_result, 1) = Val_long(read_size);
+    CAMLreturn(v_result);
 }
 
 CAMLprim value
-stub_net_write(value buffer, value num)
+mirage_solo5_net_write(value v_buf, value v_size)
 {
-    CAMLparam2(buffer, num);
-    uint8_t *data = Caml_ba_data_val(buffer);
-    int n = Int_val(num);
-    int ret;
+    CAMLparam2(v_buf, v_size);
+    const uint8_t *buf = Caml_ba_data_val(v_buf);
+    size_t size = Long_val(v_size);
+    solo5_result_t result;
 
-    assert(Caml_ba_array_val(buffer)->num_dims == 1);
-
-    ret = solo5_net_write_sync(data, n);
-    if (ret != 0)
-        CAMLreturn(Val_int(-1));
-    else
-        CAMLreturn(Val_int(n));
+    result = solo5_net_write(buf, size);
+    CAMLreturn(Val_int(result));
 }

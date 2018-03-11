@@ -3,9 +3,9 @@ Copyright (C) 2005-2008 Jérôme Vouillon
 Copyright (c) 2010-2012 Anil Madhavapeddy <anil@recoil.org>
 Copyright (c) 2012 Pierre Chambart
 Copyright (c) 2012, 2013 Citrix Inc
-Copyright (c) 2016 Martin Lucina <martin.lucina@docker.com>
 Copyright (c) 2015 Thomas Leonard <talex5@gmail.com>
 Copyright (c) 2015, IBM
+Copyright (c) 2016-2018 Martin Lucina <martin@lucina.net>
 
 Permission to use, copy, modify, and distribute this software for any
 purpose with or without fee is hereby granted, provided that the above
