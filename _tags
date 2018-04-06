@@ -1,4 +1,4 @@
-true: bin_annot, safe_string, principal
+true: bin_annot, safe_string, principal, custom
 true: warn(A-44)
 
 <myocamlbuild.ml>: package(ocb-stubblr)
