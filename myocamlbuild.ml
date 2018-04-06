@@ -1,4 +1,9 @@
 open Ocamlbuild_plugin
-open Ocb_stubblr
 
-let () = Ocamlbuild_plugin.dispatch Ocb_stubblr.init
+let () =
+  dispatch begin fun hook ->
+    Ocb_stubblr.init hook ;
+    match hook with
+    | After_rules -> flag [ "ocamlmklib" ; "custom" ] & A "-custom"
+    | _ -> ()
+  end

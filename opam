@@ -12,7 +12,10 @@ authors: [
 tags: [
   "org:mirage"
 ]
-build: [ "ocaml" "pkg/pkg.ml" "build" "--pinned" "%{pinned}%" ]
+build: [
+  [ "ocaml" "pkg/pkg.ml" "build" "--pinned" "%{pinned}%" ] { os != "openbsd" }
+  [ "ocaml" "pkg/pkg.ml" "build" "--pinned" "false" ] { os = "openbsd" }
+]
 depends: [
   "ocamlfind" {build}
   "ocamlbuild" {build}
