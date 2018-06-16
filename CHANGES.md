@@ -1,3 +1,9 @@
+## v0.3.0 (2018-06-16)
+
+* Update to Solo5 v0.3.0 APIs
+* ARM64 support
+* Support building on OpenBSD
+
 ## v0.2.1 (2017-06-15)
 
 * Use [@@noalloc] rather than "noalloc"
