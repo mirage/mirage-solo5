@@ -1,3 +1,8 @@
+## v0.4.0 (2018-09-15)
+
+* Update for Solo5 0.4.0 renaming
+* Travis: Add OCaml 4.07 to build matrix
+
 ## v0.3.0 (2018-06-16)
 
 * Update to Solo5 v0.3.0 APIs
