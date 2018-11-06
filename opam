@@ -1,8 +1,8 @@
-opam-version: "1.2"
+opam-version: "2.0"
 maintainer:   "martin@lucina.net"
 homepage:     "https://github.com/mirage/mirage-solo5"
 bug-reports:  "https://github.com/mirage/mirage-solo5/issues/"
-dev-repo:     "https://github.com/mirage/mirage-solo5.git"
+dev-repo:     "git+https://github.com/mirage/mirage-solo5.git"
 license:      "ISC"
 authors: [
   "Anil Madhavapeddy <anil@recoil.org>"
@@ -21,6 +21,7 @@ depends: [
   "ocamlbuild" {build}
   "topkg" {build & >= "0.7.6"}
   "ocb-stubblr" {build}
+  "ocaml" {>= "4.04.2"}
   "cstruct" {>= "1.0.1"}
   "lwt" {>= "2.4.3"}
   "ocaml-freestanding" {>= "0.4.0"}
@@ -33,7 +34,19 @@ conflicts: [
   "solo5-kernel-virtio"
   "solo5-kernel-muen"
 ]
-available: [ ocaml-version >= "4.04.2" ]
 post-messages: [
   "As of MirageOS 3.2.0 / Solo5 0.4.0, the 'ukvm' target has been renamed to 'hvt'. Please refer to https://github.com/mirage/mirage/blob/master/CHANGES.md for further details on this change."
 ]
+synopsis: "Solo5 core platform libraries for MirageOS"
+description: """
+This package provides the MirageOS `OS` library for
+[Solo5](https://github.com/Solo5/solo5) targets, which handles the main loop
+and timers. It also provides the low level C startup code and C stubs required
+by the OCaml code.
+
+Currently this package also includes the C stubs used by the Solo5 `console`,
+`block` and `net` implementations.
+
+The OCaml runtime and C runtime required to support it are provided separately
+by the [ocaml-freestanding](https://github.com/mirage/ocaml-freestanding) package.
+"""
