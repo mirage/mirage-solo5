@@ -1,3 +1,10 @@
+## v0.5.0 (2018-11-08)
+
+* Block, net stubs: Pass through Cstruct.buffer.off (@mato, #38)
+* Upgrade to OPAM 2 (@hannesm, #36)
+* Solo5 bindings for Genode (@ehmry, #35, @mato, #39)
+* Remove Env module (@hannesm, #34)
+
 ## v0.4.0 (2018-09-15)
 
 * Update for Solo5 0.4.0 renaming
