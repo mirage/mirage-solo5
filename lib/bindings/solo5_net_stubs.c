@@ -50,11 +50,12 @@ mirage_solo5_net_info(value v_unit)
 }
 
 CAMLprim value
-mirage_solo5_net_read(value v_buf, value v_size)
+mirage_solo5_net_read_2(value v_buf, value v_buf_offset, value v_size)
 {
-    CAMLparam2(v_buf, v_size);
+    CAMLparam3(v_buf, v_buf_offset, v_size);
     CAMLlocal1(v_result);
-    uint8_t *buf = Caml_ba_data_val(v_buf);
+    long buf_offset = Long_val(v_buf_offset);
+    uint8_t *buf = (uint8_t *)Caml_ba_data_val(v_buf) + buf_offset;
     size_t size = Long_val(v_size);
     size_t read_size;
     solo5_result_t result;
@@ -67,10 +68,11 @@ mirage_solo5_net_read(value v_buf, value v_size)
 }
 
 CAMLprim value
-mirage_solo5_net_write(value v_buf, value v_size)
+mirage_solo5_net_write_2(value v_buf, value v_buf_offset, value v_size)
 {
-    CAMLparam2(v_buf, v_size);
-    const uint8_t *buf = Caml_ba_data_val(v_buf);
+    CAMLparam3(v_buf, v_buf_offset, v_size);
+    long buf_offset = Long_val(v_buf_offset);
+    const uint8_t *buf = (uint8_t *)Caml_ba_data_val(v_buf) + buf_offset;
     size_t size = Long_val(v_size);
     solo5_result_t result;
 

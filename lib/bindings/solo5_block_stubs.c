@@ -42,11 +42,13 @@ mirage_solo5_block_info(value v_unit)
 }
 
 CAMLprim value
-mirage_solo5_block_read(value v_offset, value v_buf, value v_size)
+mirage_solo5_block_read_2(value v_offset, value v_buf, value v_buf_offset,
+        value v_size)
 {
-    CAMLparam3(v_offset, v_buf, v_size);
+    CAMLparam4(v_offset, v_buf, v_buf_offset, v_size);
     solo5_off_t offset = Int64_val(v_offset);
-    uint8_t *buf = Caml_ba_data_val(v_buf);
+    long buf_offset = Long_val(v_buf_offset);
+    uint8_t *buf = (uint8_t *)Caml_ba_data_val(v_buf) + buf_offset;
     size_t size = Long_val(v_size);
     solo5_result_t result;
 
@@ -55,11 +57,13 @@ mirage_solo5_block_read(value v_offset, value v_buf, value v_size)
 }
 
 CAMLprim value
-mirage_solo5_block_write(value v_offset, value v_buf, value v_size)
+mirage_solo5_block_write_2(value v_offset, value v_buf, value v_buf_offset,
+        value v_size)
 {
-    CAMLparam3(v_offset, v_buf, v_size);
+    CAMLparam4(v_offset, v_buf, v_buf_offset, v_size);
     solo5_off_t offset = Int64_val(v_offset);
-    const uint8_t *buf = Caml_ba_data_val(v_buf);
+    long buf_offset = Long_val(v_buf_offset);
+    const uint8_t *buf = (uint8_t *)Caml_ba_data_val(v_buf) + buf_offset;
     size_t size = Long_val(v_size);
     solo5_result_t result;
 
