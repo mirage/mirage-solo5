@@ -16,6 +16,5 @@ let () =
   Ok [
     Pkg.mllib "lib/oS.mllib" ;
     Pkg.clib ~dllfield:nowhere "lib/libmirage-solo5_bindings.clib";
-    (* Should be lib/pkgconfig/ but workaround ocaml/opam#2153 *)
-    Pkg.share_root ~dst:"pkgconfig/" "lib/bindings/mirage-solo5.pc"
+    Pkg.lib_root ~dst:"pkgconfig/" "lib/bindings/mirage-solo5.pc"
   ]
