@@ -1,8 +1,0 @@
-description = "MirageOS platform support for Solo5"
-version = "%%VERSION_NUM%%"
-requires = "lwt-dllist bheap lwt cstruct logs metrics"
-archive(byte) = "oS.cma"
-archive(native) = "oS.cmxa"
-plugin(byte) = "oS.cma"
-plugin(native) = "oS.cmxs"
-exists_if = "oS.cma"
