@@ -24,6 +24,7 @@ depends: [
   "ocaml" {>= "4.04.2"}
   "cstruct" {>= "1.0.1"}
   "lwt" {>= "2.4.3"}
+  "lwt-dllist"
   "ocaml-freestanding" {>= "0.4.1"}
   "logs"
   ("solo5-bindings-hvt" | "solo5-bindings-virtio" | "solo5-bindings-muen" | "solo5-bindings-genode")

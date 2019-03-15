@@ -25,13 +25,13 @@ open Lwt
 
 external solo5_yield : [`Time] Time.Monotonic.t -> bool = "mirage_solo5_yield"
 
-let exit_hooks = Lwt_sequence.create ()
-let enter_hooks = Lwt_sequence.create ()
-let exit_iter_hooks = Lwt_sequence.create ()
-let enter_iter_hooks = Lwt_sequence.create ()
+let exit_hooks = Lwt_dllist.create ()
+let enter_hooks = Lwt_dllist.create ()
+let exit_iter_hooks = Lwt_dllist.create ()
+let enter_iter_hooks = Lwt_dllist.create ()
 
 let rec call_hooks hooks  =
-  match Lwt_sequence.take_opt_l hooks with
+  match Lwt_dllist.take_opt_l hooks with
     | None ->
         return ()
     | Some f ->
@@ -72,11 +72,11 @@ let run t =
         in
         if solo5_yield timeout then begin
           (* Call enter hooks. *)
-          Lwt_sequence.iter_l (fun f -> f ()) enter_iter_hooks;
+          Lwt_dllist.iter_l (fun f -> f ()) enter_iter_hooks;
           (* Some I/O is possible, wake up threads and continue. *)
           Lwt_condition.broadcast work ();
           (* Call leave hooks. *)
-          Lwt_sequence.iter_l (fun f -> f ()) exit_iter_hooks;
+          Lwt_dllist.iter_l (fun f -> f ()) exit_iter_hooks;
           aux ()
         end else begin
           aux ()
@@ -84,7 +84,7 @@ let run t =
   aux ()
 
 let () = at_exit (fun () -> run (call_hooks exit_hooks))
-let at_exit f = ignore (Lwt_sequence.add_l f exit_hooks)
-let at_enter f = ignore (Lwt_sequence.add_l f enter_hooks)
-let at_exit_iter f = ignore (Lwt_sequence.add_l f exit_iter_hooks)
-let at_enter_iter f = ignore (Lwt_sequence.add_l f enter_iter_hooks)
+let at_exit f = ignore (Lwt_dllist.add_l f exit_hooks)
+let at_enter f = ignore (Lwt_dllist.add_l f enter_hooks)
+let at_exit_iter f = ignore (Lwt_dllist.add_l f exit_iter_hooks)
+let at_enter_iter f = ignore (Lwt_dllist.add_l f enter_iter_hooks)
