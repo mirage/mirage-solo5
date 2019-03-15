@@ -2,7 +2,7 @@ true: bin_annot, safe_string, principal, custom
 true: warn(A-44)
 
 <myocamlbuild.ml>: package(ocb-stubblr)
-<lib/*>: package(lwt-dllist lwt cstruct logs)
+<lib/*>: package(bheap lwt-dllist lwt cstruct logs)
 <lib/*.cm{x,o}> and not <lib/oS.cmx>: for-pack(OS)
 <lib/bindings/*.c>: pkg-config(ocaml-freestanding)
 <lib/bindings/*.c> : ccopt(-O2 -std=c99 -Wall -Werror)

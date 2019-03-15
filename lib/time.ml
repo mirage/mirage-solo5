@@ -51,13 +51,18 @@ type sleep = {
 }
 
 module SleepQueue =
-  Lwt_pqueue.Make (struct
+  Binary_heap.Make (struct
                      type t = sleep
-                     let compare { time = t1; _ } { time = t2; _ } = compare t1 t2
+                     let compare { time = t1; _ } { time = t2; _ } =
+                       (* bheap library only operates on maximums, but we
+                          need the minimum, so invert the order *)
+                       let invert_comparison x = -x in
+                       invert_comparison (compare t1 t2)
                    end)
 
 (* Threads waiting for a timeout to expire: *)
-let sleep_queue = ref SleepQueue.empty
+(* bheap datastructure needs to be created with initial strictly positive capacity *)
+let sleep_queue = SleepQueue.create 1
 
 (* Sleepers added since the last iteration of the main loop:
 
@@ -84,16 +89,16 @@ let in_the_past now t =
   t = 0L || t <= now ()
 
 let rec restart_threads now =
-  match SleepQueue.lookup_min !sleep_queue with
-    | Some{ canceled = true; _ } ->
-        sleep_queue := SleepQueue.remove_min !sleep_queue;
-        restart_threads now
-    | Some{ time = time; thread = thread; _ } when in_the_past now time ->
-        sleep_queue := SleepQueue.remove_min !sleep_queue;
-        Lwt.wakeup thread ();
-        restart_threads now
-    | _ ->
-        ()
+  match SleepQueue.maximum sleep_queue with
+  | { canceled = true; _ } ->
+      SleepQueue.remove sleep_queue;
+      restart_threads now
+  | { time = time; thread = thread; _ } when in_the_past now time ->
+      SleepQueue.remove sleep_queue;
+      Lwt.wakeup thread ();
+      restart_threads now
+  | _ -> ()
+  | exception Not_found -> ()
 
 (* +-----------------------------------------------------------------+
    | Event loop                                                      |
@@ -105,20 +110,18 @@ let min_timeout a b = match a, b with
   | Some a, Some b -> Some(min a b)
 
 let rec get_next_timeout () =
-  match SleepQueue.lookup_min !sleep_queue with
-    | Some{ canceled = true; _ } ->
-        sleep_queue := SleepQueue.remove_min !sleep_queue;
-        get_next_timeout ()
-    | Some{ time = time; _ } ->
-        Some time
-    | None ->
-        None
+  match SleepQueue.maximum sleep_queue with
+  | { canceled = true; _ } ->
+      SleepQueue.remove sleep_queue;
+      get_next_timeout ()
+  | { time = time; _ } ->
+      Some time
+  | exception Not_found -> None
 
 let select_next () =
   (* Transfer all sleepers added since the last iteration to the main
      sleep queue: *)
-  sleep_queue :=
-    List.fold_left
-      (fun q e -> SleepQueue.add e q) !sleep_queue !new_sleeps;
+  List.iter
+      (fun e -> SleepQueue.add sleep_queue e) !new_sleeps;
   new_sleeps := [];
   get_next_timeout ()
