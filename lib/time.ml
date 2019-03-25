@@ -90,6 +90,7 @@ let in_the_past now t =
 
 let rec restart_threads now =
   match SleepQueue.maximum sleep_queue with
+  | exception Binary_heap.Empty -> ()
   | { canceled = true; _ } ->
       SleepQueue.remove sleep_queue;
       restart_threads now
@@ -98,7 +99,6 @@ let rec restart_threads now =
       Lwt.wakeup thread ();
       restart_threads now
   | _ -> ()
-  | exception Not_found -> ()
 
 (* +-----------------------------------------------------------------+
    | Event loop                                                      |
@@ -111,12 +111,12 @@ let min_timeout a b = match a, b with
 
 let rec get_next_timeout () =
   match SleepQueue.maximum sleep_queue with
+  | exception Binary_heap.Empty -> None
   | { canceled = true; _ } ->
       SleepQueue.remove sleep_queue;
       get_next_timeout ()
   | { time = time; _ } ->
       Some time
-  | exception Not_found -> None
 
 let select_next () =
   (* Transfer all sleepers added since the last iteration to the main
