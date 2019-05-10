@@ -1,34 +1,3 @@
-module Lifecycle : sig
-
-val await_shutdown_request :
-  ?can_poweroff:bool ->
-  ?can_reboot:bool ->
-  unit -> [`Poweroff | `Reboot] Lwt.t
-(** [await_shutdown_request ()] is thread that resolves when the domain is
-    asked to shut down.
-    The optional [poweroff] (default:[true]) and [reboot] (default:[false])
-    arguments can be used to indicate which features the caller wants to
-    advertise (however, you can still get a request for a mode you didn't claim
-    to support). *)
-
-end
-
-module Main : sig
-val wait_for_work : unit -> unit Lwt.t
-val run : unit Lwt.t -> unit
-val at_enter : (unit -> unit Lwt.t) -> unit
-val at_enter_iter : (unit -> unit) -> unit
-val at_exit_iter  : (unit -> unit) -> unit
-end
-
-module MM : sig
-module Heap_pages : sig
-  val total: unit -> int
-  val used: unit -> int
-end
-end
-module Time : sig
-
 type +'a io = 'a Lwt.t
 
 (** Timeout operations. *)
@@ -74,15 +43,3 @@ val with_timeout : int64 -> (unit -> 'a Lwt.t) -> 'a Lwt.t
     Lwt.pick [Lwt_unix.timeout d; f ()]
     ]}
 *)
-end
-
-module Solo5 : sig
-
-type solo5_result =
-  | SOLO5_R_OK
-  | SOLO5_R_AGAIN
-  | SOLO5_R_EINVAL
-  | SOLO5_R_EUNSPEC
-(** A type mapping the C enum solo5_result_t to OCaml **)
-
-end

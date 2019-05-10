@@ -25,7 +25,6 @@ open Lwt
 
 external solo5_yield : [`Time] Time.Monotonic.t -> bool = "mirage_solo5_yield"
 
-let exit_hooks = Lwt_dllist.create ()
 let enter_hooks = Lwt_dllist.create ()
 let exit_iter_hooks = Lwt_dllist.create ()
 let enter_iter_hooks = Lwt_dllist.create ()
@@ -83,8 +82,6 @@ let run t =
         end in
   aux ()
 
-let () = at_exit (fun () -> run (call_hooks exit_hooks))
-let at_exit f = ignore (Lwt_dllist.add_l f exit_hooks)
 let at_enter f = ignore (Lwt_dllist.add_l f enter_hooks)
 let at_exit_iter f = ignore (Lwt_dllist.add_l f exit_iter_hooks)
 let at_enter_iter f = ignore (Lwt_dllist.add_l f enter_iter_hooks)
