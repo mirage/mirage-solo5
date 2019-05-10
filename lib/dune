@@ -1,9 +1,17 @@
 (library
-  (name oS)
-  (public_name mirage-solo5)
+  (name OS_Solo5)
+  (public_name mirage-solo5.internals)
+  (modules :standard \ OS)
   (c_names alloc_pages_stubs atomic_stubs barrier_stubs checksum_stubs clock_stubs cstruct_stubs main mm_stubs solo5_block_stubs solo5_console_stubs solo5_net_stubs)
   (c_flags (:include cflags) -O2 -std=c99 -Wall -Werror)
   (libraries metrics lwt cstruct logs bheap lwt-dllist))
+
+(library
+  (name OS)
+  (public_name mirage-solo5)
+  (libraries mirage-solo5.internals)
+  (modules OS)
+ )
 
 (copy_files bindings/*.c)
 (rule (copy %{lib:ocaml-freestanding:cflags} cflags))

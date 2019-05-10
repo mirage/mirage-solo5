@@ -104,11 +104,6 @@ let rec restart_threads now =
    | Event loop                                                      |
    +-----------------------------------------------------------------+ *)
 
-let min_timeout a b = match a, b with
-  | None, b -> b
-  | a, None -> a
-  | Some a, Some b -> Some(min a b)
-
 let rec get_next_timeout () =
   match SleepQueue.maximum sleep_queue with
   | exception Binary_heap.Empty -> None
