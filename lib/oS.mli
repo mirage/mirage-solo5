@@ -22,11 +22,9 @@ val at_exit_iter  : (unit -> unit) -> unit
 end
 
 module MM : sig
-module Heap_pages : sig
-  val total: unit -> int
-  val used: unit -> int
+  val malloc_metrics : tags:'a Metrics.Tags.t -> ('a, unit -> Metrics.Data.t) Metrics.src
 end
-end
+
 module Time : sig
 
 type +'a io = 'a Lwt.t
