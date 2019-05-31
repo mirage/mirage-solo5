@@ -1,17 +1,17 @@
 (library
-  (name oS)
+  (name OS_solo5)
   (public_name mirage-solo5.internals)
-  (modules lifecycle main mM oS solo5 time)
+  (modules lifecycle main mM solo5 time)
   (c_names alloc_pages_stubs atomic_stubs barrier_stubs checksum_stubs clock_stubs cstruct_stubs main mm_stubs solo5_block_stubs solo5_console_stubs solo5_net_stubs)
   (c_flags (:include cflags) -O2 -std=c99 -Wall -Werror)
   (libraries lwt cstruct logs bheap lwt-dllist))
 
 (library
-  (name oS_common)
+  (name OS)
   (public_name mirage-solo5)
   (implements mirage-os-shim)
   (libraries mirage-solo5.internals)
-  (modules mirage_OS)
+  (modules OS)
  )
 
 (copy_files bindings/*.c)
