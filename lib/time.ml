@@ -71,11 +71,28 @@ let sleep_queue =
 *)
 let new_sleeps = ref []
 
+let sleep_metrics =
+  let open Metrics in
+  let doc = "Sleep queue size" in
+  let data () =
+    let q_size = SleepQueue.length sleep_queue
+    and new_size = List.length !new_sleeps
+    in
+    Data.v
+      [ uint "sleep queue size" q_size
+      ; uint "new sleeper size" new_size
+      ; uint "total sleeper size" (q_size + new_size) ]
+  in
+  Src.v ~doc ~tags:Metrics.Tags.[] ~data "sleep"
+
+let m () = Metrics.add sleep_metrics (fun x -> x) (fun d -> d ())
+
 let sleep_ns d =
   let (res, w) = Lwt.task () in
   let t = Monotonic.(time () + of_nanoseconds d) in
   let sleeper = { time = t; canceled = false; thread = w } in
   new_sleeps := sleeper :: !new_sleeps;
+  m ();
   Lwt.on_cancel res (fun _ -> sleeper.canceled <- true);
   res
 
@@ -93,9 +110,11 @@ let rec restart_threads now =
   | exception Binary_heap.Empty -> ()
   | { canceled = true; _ } ->
       SleepQueue.remove sleep_queue;
+      m ();
       restart_threads now
   | { time = time; thread = thread; _ } when in_the_past now time ->
       SleepQueue.remove sleep_queue;
+      m ();
       Lwt.wakeup thread ();
       restart_threads now
   | _ -> ()
@@ -114,6 +133,7 @@ let rec get_next_timeout () =
   | exception Binary_heap.Empty -> None
   | { canceled = true; _ } ->
       SleepQueue.remove sleep_queue;
+      m ();
       get_next_timeout ()
   | { time = time; _ } ->
       Some time
@@ -121,7 +141,7 @@ let rec get_next_timeout () =
 let select_next () =
   (* Transfer all sleepers added since the last iteration to the main
      sleep queue: *)
-  List.iter
-      (fun e -> SleepQueue.add sleep_queue e) !new_sleeps;
+  List.iter (fun e -> SleepQueue.add sleep_queue e) !new_sleeps;
   new_sleeps := [];
+  m ();
   get_next_timeout ()
