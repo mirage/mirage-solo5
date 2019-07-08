@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 Thomas Leonard <talex5@gmail.com>
+ * Copyright (c) 2019 Hannes Mehnert <hannes@mehnert.org>
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -16,23 +16,27 @@
 
 #include "solo5.h"
 
-#include <stdio.h>
 #include <stdlib.h>
 
 #include <caml/mlvalues.h>
+#include <caml/alloc.h>
+#include <caml/memory.h>
 
 CAMLprim value
-stub_heap_get_pages_total(__attribute__((unused)) value unit) // noalloc
+stub_mallinfo(value unit)
 {
-	//return Val_long(minios_heap_pages_total);
-	printf("STUB: %s unimplemented, aborting\n", __func__);
-        abort();
-}
+  CAMLparam1(unit);
+  CAMLlocal1(res);
+  struct mallinfo mi;
 
-CAMLprim value
-stub_heap_get_pages_used(__attribute__((unused)) value unit) // noalloc
-{
-	//return Val_long(minios_heap_pages_used);
-	printf("STUB: %s unimplemented, aborting\n", __func__);
-        abort();
+  mi = mallinfo();
+  res = caml_alloc(7, 0);
+  Store_field (res, 0, Val_int(mi.arena));
+  Store_field (res, 1, Val_int(mi.ordblks));
+  Store_field (res, 2, Val_int(mi.hblkhd));
+  Store_field (res, 3, Val_int(mi.usmblks));
+  Store_field (res, 4, Val_int(mi.uordblks));
+  Store_field (res, 5, Val_int(mi.fordblks));
+  Store_field (res, 6, Val_int(mi.keepcost));
+  CAMLreturn(res);
 }
