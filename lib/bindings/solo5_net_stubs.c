@@ -1,5 +1,6 @@
 /* Copyright (c) 2015, IBM 
  * Author(s): Dan Williams <djwillia@us.ibm.com> 
+ * Copyright 2019 Martin Lucina <martin@lucina.net>
  *
  * Permission to use, copy, modify, and/or distribute this software
  * for any purpose with or without fee is hereby granted, provided
@@ -29,38 +30,56 @@
 #include <caml/bigarray.h>
 
 CAMLprim value
-mirage_solo5_net_info(value v_unit)
+mirage_solo5_net_acquire(value v_name)
 {
-    CAMLparam1(v_unit);
-    CAMLlocal2(v_mac_address, v_result);
+    CAMLparam1(v_name);
+    CAMLlocal3(v_mac_address, v_info, v_result);
+    solo5_result_t result;
+    solo5_handle_t handle;
     struct solo5_net_info ni;
 
-    solo5_net_info(&ni);
-    v_mac_address = caml_alloc_string(SOLO5_NET_ALEN);
+    result = solo5_net_acquire(String_val(v_name), &handle, &ni);
+    v_info = caml_alloc(2, 0);
+    if (result != SOLO5_R_OK) {
+        /*
+         * On error (*ni) is not valid, so fake an empty structure to return.
+         */
+        Store_field(v_info, 0, caml_copy_string(""));
+        Store_field(v_info, 1, Val_long(0));
+    }
+    else {
+        v_mac_address = caml_alloc_string(SOLO5_NET_ALEN);
 #if defined(Bytes_val)
-    memcpy(Bytes_val(v_mac_address), ni.mac_address, SOLO5_NET_ALEN);
+        memcpy(Bytes_val(v_mac_address), ni.mac_address, SOLO5_NET_ALEN);
 #else
-    memcpy(String_val(v_mac_address), ni.mac_address, SOLO5_NET_ALEN);
+        memcpy(String_val(v_mac_address), ni.mac_address, SOLO5_NET_ALEN);
 #endif
-    v_result = caml_alloc(2, 0);
-    Store_field(v_result, 0, v_mac_address);
-    Store_field(v_result, 1, Val_long(ni.mtu));
+        v_info = caml_alloc(2, 0);
+        Store_field(v_info, 0, v_mac_address);
+        Store_field(v_info, 1, Val_long(ni.mtu));
+    }
 
+    v_result = caml_alloc_tuple(3);
+    Field(v_result, 0) = Val_int(result);
+    Field(v_result, 1) = caml_copy_int64(handle);
+    Field(v_result, 2) = v_info;
     CAMLreturn(v_result);
 }
 
 CAMLprim value
-mirage_solo5_net_read_2(value v_buf, value v_buf_offset, value v_size)
+mirage_solo5_net_read_3(value v_handle, value v_buf, value v_buf_offset,
+        value v_size)
 {
-    CAMLparam3(v_buf, v_buf_offset, v_size);
+    CAMLparam4(v_handle, v_buf, v_buf_offset, v_size);
     CAMLlocal1(v_result);
+    solo5_handle_t handle = Int64_val(v_handle);
     long buf_offset = Long_val(v_buf_offset);
     uint8_t *buf = (uint8_t *)Caml_ba_data_val(v_buf) + buf_offset;
     size_t size = Long_val(v_size);
     size_t read_size;
     solo5_result_t result;
     
-    result = solo5_net_read(buf, size, &read_size);
+    result = solo5_net_read(handle, buf, size, &read_size);
     v_result = caml_alloc_tuple(2);
     Field(v_result, 0) = Val_int(result);
     Field(v_result, 1) = Val_long(read_size);
@@ -68,14 +87,16 @@ mirage_solo5_net_read_2(value v_buf, value v_buf_offset, value v_size)
 }
 
 CAMLprim value
-mirage_solo5_net_write_2(value v_buf, value v_buf_offset, value v_size)
+mirage_solo5_net_write_3(value v_handle, value v_buf, value v_buf_offset,
+        value v_size)
 {
-    CAMLparam3(v_buf, v_buf_offset, v_size);
+    CAMLparam4(v_handle, v_buf, v_buf_offset, v_size);
+    solo5_handle_t handle = Int64_val(v_handle);
     long buf_offset = Long_val(v_buf_offset);
     const uint8_t *buf = (uint8_t *)Caml_ba_data_val(v_buf) + buf_offset;
     size_t size = Long_val(v_size);
     solo5_result_t result;
 
-    result = solo5_net_write(buf, size);
+    result = solo5_net_write(handle, buf, size);
     CAMLreturn(Val_int(result));
 }

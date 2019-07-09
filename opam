@@ -29,7 +29,7 @@ depends: [
   "ocaml-freestanding" {>= "0.4.5"}
   "metrics"
   "logs"
-  ("solo5-bindings-hvt" | "solo5-bindings-virtio" | "solo5-bindings-muen" | "solo5-bindings-genode")
+  ("solo5-bindings-hvt" | "solo5-bindings-spt" | "solo5-bindings-virtio" | "solo5-bindings-muen" | "solo5-bindings-genode")
 ]
 conflicts: [
   "io-page" {< "2.0.0"}
