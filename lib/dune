@@ -9,6 +9,7 @@
 (library
   (name OS)
   (public_name mirage-solo5)
+  (implements mirage-os-shim)
   (libraries mirage-solo5.internals)
   (modules OS)
  )

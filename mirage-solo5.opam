@@ -19,10 +19,11 @@ build: [
 ]
 depends: [
   "metrics"
-  "dune" {build & >= "1.0"}
   "ocaml" {>= "4.05.0"}
+  "dune" {build & >= "1.7"}
   "cstruct" {>= "1.0.1"}
   "lwt" {>= "2.4.3"}
+  "mirage-os-shim"
   "lwt-dllist"
   "bheap"
   "ocaml-freestanding" {>= "0.4.5"}
