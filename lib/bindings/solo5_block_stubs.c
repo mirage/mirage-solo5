@@ -51,9 +51,9 @@ mirage_solo5_block_acquire(value v_name)
     }
 
     v_result = caml_alloc_tuple(3);
-    Field(v_result, 0) = Val_int(result);
-    Field(v_result, 1) = caml_copy_int64(handle);
-    Field(v_result, 2) = v_info;
+    Store_field(v_result, 0, Val_int(result));
+    Store_field(v_result, 1, caml_copy_int64(handle));
+    Store_field(v_result, 2, v_info);
     CAMLreturn(v_result);
 }
 

@@ -36,8 +36,8 @@ mirage_solo5_yield_2(value v_deadline)
     bool rc = solo5_yield(deadline, &ready_set);
 
     v_result = caml_alloc_tuple(2);
-    Field(v_result, 0) = Val_bool(rc);
-    Field(v_result, 1) = caml_copy_int64(ready_set);
+    Store_field(v_result, 0, Val_bool(rc));
+    Store_field(v_result, 1, caml_copy_int64(ready_set));
     CAMLreturn(v_result);
 }
 
