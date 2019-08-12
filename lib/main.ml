@@ -23,7 +23,7 @@
 
 open Lwt
 
-external solo5_yield : [`Time] Time.Monotonic.t -> bool * int64 =
+external solo5_yield : [`Time] Time.Monotonic.t -> int64 =
     "mirage_solo5_yield_2"
 
 let exit_hooks = Lwt_dllist.create ()
@@ -78,13 +78,13 @@ let run t =
           |None -> Time.Monotonic.(time () + of_nanoseconds 86_400_000_000_000L) (* one day = 24 * 60 * 60 s *)
           |Some tm -> tm
         in
-        let (io_ready, ready_set) = solo5_yield timeout in
-        if io_ready then begin
+        let ready_set = solo5_yield timeout in
+        if not (Int64.equal 0L ready_set) then begin
           (* Call enter hooks. *)
           Lwt_dllist.iter_l (fun f -> f ()) enter_iter_hooks;
           (* Some I/O is possible, wake up threads and continue. *)
           let is_in_set set x =
-            not Int64.(equal zero (logand set (shift_left 1L (to_int x)))) in
+            not Int64.(equal 0L (logand set (shift_left 1L (to_int x)))) in
           HandleMap.iter (fun k v ->
             if is_in_set ready_set k then Lwt_condition.broadcast v ()) !work;
           (* Call leave hooks. *)

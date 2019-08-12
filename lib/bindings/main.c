@@ -29,16 +29,12 @@ CAMLprim value
 mirage_solo5_yield_2(value v_deadline)
 {
     CAMLparam1(v_deadline);
-    CAMLlocal1(v_result);
 
     solo5_time_t deadline = (Int64_val(v_deadline));
     solo5_handle_set_t ready_set;
-    bool rc = solo5_yield(deadline, &ready_set);
+    solo5_yield(deadline, &ready_set);
 
-    v_result = caml_alloc_tuple(2);
-    Store_field(v_result, 0, Val_bool(rc));
-    Store_field(v_result, 1, caml_copy_int64(ready_set));
-    CAMLreturn(v_result);
+    CAMLreturn(caml_copy_int64(ready_set));
 }
 
 CAMLprim value
