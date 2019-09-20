@@ -73,6 +73,8 @@ let run t =
     | Some () ->
         ()
     | None ->
+        (* Call enter hooks. *)
+        Lwt_dllist.iter_l (fun f -> f ()) enter_iter_hooks;
         let timeout =
           match Time.select_next () with
           |None -> Time.Monotonic.(time () + of_nanoseconds 86_400_000_000_000L) (* one day = 24 * 60 * 60 s *)
@@ -80,19 +82,16 @@ let run t =
         in
         let ready_set = solo5_yield timeout in
         if not (Int64.equal 0L ready_set) then begin
-          (* Call enter hooks. *)
-          Lwt_dllist.iter_l (fun f -> f ()) enter_iter_hooks;
           (* Some I/O is possible, wake up threads and continue. *)
           let is_in_set set x =
             not Int64.(equal 0L (logand set (shift_left 1L (to_int x)))) in
           HandleMap.iter (fun k v ->
-            if is_in_set ready_set k then Lwt_condition.broadcast v ()) !work;
-          (* Call leave hooks. *)
-          Lwt_dllist.iter_l (fun f -> f ()) exit_iter_hooks;
-          aux ()
-        end else begin
-          aux ()
-        end in
+            if is_in_set ready_set k then Lwt_condition.broadcast v ()) !work
+        end;
+        (* Call leave hooks. *)
+        Lwt_dllist.iter_l (fun f -> f ()) exit_iter_hooks;
+        aux ()
+  in
   aux ()
 
 let () = at_exit (fun () -> run (call_hooks exit_hooks))
