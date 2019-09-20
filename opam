@@ -29,16 +29,13 @@ depends: [
   "ocaml-freestanding" {>= "0.4.5"}
   "metrics"
   "logs"
-  ("solo5-bindings-hvt" | "solo5-bindings-spt" | "solo5-bindings-virtio" | "solo5-bindings-muen" | "solo5-bindings-genode")
+  ("solo5-bindings-hvt" {>= "0.6.0"} | "solo5-bindings-spt" {>= "0.6.0"} | "solo5-bindings-virtio" {>= "0.6.0"} | "solo5-bindings-muen" {>= "0.6.0"} | "solo5-bindings-genode" {>= "0.6.0"})
 ]
 conflicts: [
   "io-page" {< "2.0.0"}
   "solo5-kernel-ukvm"
   "solo5-kernel-virtio"
   "solo5-kernel-muen"
-]
-post-messages: [
-  "As of MirageOS 3.2.0 / Solo5 0.4.0, the 'ukvm' target has been renamed to 'hvt'. Please refer to https://github.com/mirage/mirage/blob/master/CHANGES.md for further details on this change."
 ]
 synopsis: "Solo5 core platform libraries for MirageOS"
 description: """
