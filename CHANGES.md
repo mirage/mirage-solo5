@@ -1,3 +1,11 @@
+## v0.6.0 (2019-09-24)
+
+* Update to Solo5 0.6.0+ APIs, multiple devices support (@mato, @hannesm, #46)
+* Provide a malloc statistics source (@hannesm, #43)
+* Replace deprecated modules (@pascutto, #42)
+* Install mirage-solo5.pc to lib/pkgconfig instead of share/pkgconfig
+  (@hannesm, #40)
+
 ## v0.5.0 (2018-11-08)
 
 * Block, net stubs: Pass through Cstruct.buffer.off (@mato, #38)
