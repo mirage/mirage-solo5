@@ -23,7 +23,8 @@
 
 open Lwt
 
-external solo5_yield : [`Time] Time.Monotonic.t -> bool = "mirage_solo5_yield"
+external solo5_yield : [`Time] Time.Monotonic.t -> int64 =
+    "mirage_solo5_yield_2"
 
 let exit_hooks = Lwt_dllist.create ()
 let enter_hooks = Lwt_dllist.create ()
@@ -43,13 +44,20 @@ let rec call_hooks hooks  =
             return ()) in
         call_hooks hooks
 
-(* Solo5 currently has an all-or-nothing interface to block and wait for I/O
- * events, so we use a single condition variable to block threads which are
- * waiting for work and wake them all up if I/O is possible.  This will need to
- * be extended once solo5_yield() gains support for selecting events of
- * interest. *)
-let work = Lwt_condition.create ()
-let wait_for_work () = Lwt_condition.wait work
+(* A Map from Int64 (solo5_handle_t) to an Lwt_condition. *)
+module HandleMap = Map.Make(Int64)
+let work = ref HandleMap.empty
+
+(* Wait for work on handle [h]. The Lwt_condition and HandleMap binding are
+ * created lazily the first time [h] is waited on. *)
+let wait_for_work_on_handle h =
+  match HandleMap.find h !work with
+    | exception Not_found ->
+      let cond = Lwt_condition.create () in
+      work := HandleMap.add h cond !work;
+      Lwt_condition.wait cond
+    | cond ->
+      Lwt_condition.wait cond
 
 let err exn =
   Logs.err (fun m -> m "main: %s\n%s" (Printexc.to_string exn) (Printexc.get_backtrace ())) ;
@@ -65,22 +73,25 @@ let run t =
     | Some () ->
         ()
     | None ->
+        (* Call enter hooks. *)
+        Lwt_dllist.iter_l (fun f -> f ()) enter_iter_hooks;
         let timeout =
           match Time.select_next () with
           |None -> Time.Monotonic.(time () + of_nanoseconds 86_400_000_000_000L) (* one day = 24 * 60 * 60 s *)
           |Some tm -> tm
         in
-        if solo5_yield timeout then begin
-          (* Call enter hooks. *)
-          Lwt_dllist.iter_l (fun f -> f ()) enter_iter_hooks;
+        let ready_set = solo5_yield timeout in
+        if not (Int64.equal 0L ready_set) then begin
           (* Some I/O is possible, wake up threads and continue. *)
-          Lwt_condition.broadcast work ();
-          (* Call leave hooks. *)
-          Lwt_dllist.iter_l (fun f -> f ()) exit_iter_hooks;
-          aux ()
-        end else begin
-          aux ()
-        end in
+          let is_in_set set x =
+            not Int64.(equal 0L (logand set (shift_left 1L (to_int x)))) in
+          HandleMap.iter (fun k v ->
+            if is_in_set ready_set k then Lwt_condition.broadcast v ()) !work
+        end;
+        (* Call leave hooks. *)
+        Lwt_dllist.iter_l (fun f -> f ()) exit_iter_hooks;
+        aux ()
+  in
   aux ()
 
 let () = at_exit (fun () -> run (call_hooks exit_hooks))
