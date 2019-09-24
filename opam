@@ -13,8 +13,7 @@ tags: [
   "org:mirage"
 ]
 build: [
-  [ "ocaml" "pkg/pkg.ml" "build" "--pinned" "%{pinned}%" ] { os != "openbsd" }
-  [ "ocaml" "pkg/pkg.ml" "build" "--pinned" "false" ] { os = "openbsd" }
+  [ "ocaml" "pkg/pkg.ml" "build" "--dev-pkg" "%{dev}%" ]
 ]
 depends: [
   "ocamlfind" {build}
