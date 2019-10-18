@@ -3,6 +3,7 @@ true: warn(A-44)
 
 <myocamlbuild.ml>: package(ocb-stubblr)
 <lib/*>: package(bheap lwt-dllist lwt cstruct logs metrics)
-<lib/*.cm{x,o}> and not <lib/oS.cmx>: for-pack(OS)
+<lib/*.cm{x,o}> and not <lib/oS.cmx> and not <lib/MirageOS.*>: for-pack(OS)
+<lib/MirageOS.cm{x,xa,o,a}>: without_cmi, package(mirage-os-shim)
 <lib/bindings/*.c>: pkg-config(ocaml-freestanding)
 <lib/bindings/*.c> : ccopt(-O2 -std=c99 -Wall -Werror)
