@@ -6,3 +6,13 @@ archive(native) = "oS.cmxa"
 plugin(byte) = "oS.cma"
 plugin(native) = "oS.cmxs"
 exists_if = "oS.cma"
+
+package "os" (
+  directory = "os"
+  description = ""
+  requires = "mirage-os-shim mirage-solo5"
+  archive(byte) = "MirageOS.cma"
+  archive(native) = "MirageOS.cmxa"
+  plugin(byte) = "MirageOS.cma"
+  plugin(native) = "MirageOS.cmxa"
+)
