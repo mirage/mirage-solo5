@@ -21,28 +21,8 @@
  * 02111-1307, USA.
  *)
 
-open Lwt
-
 external solo5_yield : [`Time] Time.Monotonic.t -> int64 =
     "mirage_solo5_yield_2"
-
-let exit_hooks = Lwt_dllist.create ()
-let enter_hooks = Lwt_dllist.create ()
-let exit_iter_hooks = Lwt_dllist.create ()
-let enter_iter_hooks = Lwt_dllist.create ()
-
-let rec call_hooks hooks  =
-  match Lwt_dllist.take_opt_l hooks with
-    | None ->
-        return ()
-    | Some f ->
-        (* Run the hooks in parallel *)
-        let _ =
-          Lwt.catch f
-          (fun exn ->
-            Printf.printf "ERROR: call_hooks(): Unhandled exception: %s\n%!" (Printexc.to_string exn);
-            return ()) in
-        call_hooks hooks
 
 (* A Map from Int64 (solo5_handle_t) to an Lwt_condition. *)
 module HandleMap = Map.Make(Int64)
@@ -65,7 +45,6 @@ let err exn =
 
 (* Execute one iteration and register a callback function *)
 let run t =
-  let t = call_hooks enter_hooks <&> t in
   let rec aux () =
     Lwt.wakeup_paused ();
     Time.restart_threads Time.Monotonic.time;
@@ -74,7 +53,7 @@ let run t =
         ()
     | None ->
         (* Call enter hooks. *)
-        Lwt_dllist.iter_l (fun f -> f ()) enter_iter_hooks;
+        Mirage_runtime.run_enter_iter_hooks () ;
         let timeout =
           match Time.select_next () with
           |None -> Time.Monotonic.(time () + of_nanoseconds 86_400_000_000_000L) (* one day = 24 * 60 * 60 s *)
@@ -89,13 +68,12 @@ let run t =
             if is_in_set ready_set k then Lwt_condition.broadcast v ()) !work
         end;
         (* Call leave hooks. *)
-        Lwt_dllist.iter_l (fun f -> f ()) exit_iter_hooks;
+        Mirage_runtime.run_leave_iter_hooks () ;
         aux ()
   in
   aux ()
 
-let () = at_exit (fun () -> run (call_hooks exit_hooks))
-let at_exit f = ignore (Lwt_dllist.add_l f exit_hooks)
-let at_enter f = ignore (Lwt_dllist.add_l f enter_hooks)
-let at_exit_iter f = ignore (Lwt_dllist.add_l f exit_iter_hooks)
-let at_enter_iter f = ignore (Lwt_dllist.add_l f enter_iter_hooks)
+let () =
+  at_exit (fun () ->
+    Lwt.abandon_wakeups () ;
+    run (Mirage_runtime.run_exit_hooks ()))
