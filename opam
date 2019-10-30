@@ -26,7 +26,6 @@ depends: [
   "lwt" {>= "2.4.3"}
   "ocaml-freestanding" {>= "0.4.5"}
   "metrics"
-  "logs"
   "mirage-runtime" {>= "3.7.0"}
   ("solo5-bindings-hvt" {>= "0.6.0" & < "0.7.0"} | "solo5-bindings-spt" {>= "0.6.0" & < "0.7.0"} | "solo5-bindings-virtio" {>= "0.6.0" & < "0.7.0"} | "solo5-bindings-muen" {>= "0.6.0" & < "0.7.0"} | "solo5-bindings-genode" {>= "0.6.0" & < "0.7.0"})
 ]
