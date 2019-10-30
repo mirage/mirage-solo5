@@ -25,8 +25,6 @@
 
 open Lwt
 
-type +'a io = 'a Lwt.t
-
 module Monotonic = struct
   type time_kind = [`Time | `Interval]
   type 'a t = int64 constraint 'a = [< time_kind]
