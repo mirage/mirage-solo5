@@ -91,6 +91,12 @@ let run t =
   in
   aux ()
 
+let () =
+  at_exit (fun () ->
+    Lwt.abandon_wakeups () ;
+    run (Mirage_runtime.run_exit_hooks ()))
+
 let at_enter f = ignore (Lwt_dllist.add_l f enter_hooks)
 let at_enter_iter f = Mirage_runtime.at_enter_iter f
 let at_exit_iter f = Mirage_runtime.at_leave_iter f
+let at_exit f = Mirage_runtime.at_exit f
