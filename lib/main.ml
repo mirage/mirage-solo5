@@ -21,25 +21,8 @@
  * 02111-1307, USA.
  *)
 
-open Lwt
-
 external solo5_yield : [`Time] Time.Monotonic.t -> int64 =
     "mirage_solo5_yield_2"
-
-let enter_hooks = Lwt_dllist.create ()
-
-let rec call_hooks hooks  =
-  match Lwt_dllist.take_opt_l hooks with
-    | None ->
-        return ()
-    | Some f ->
-        (* Run the hooks in parallel *)
-        let _ =
-          Lwt.catch f
-          (fun exn ->
-            Printf.printf "ERROR: call_hooks(): Unhandled exception: %s\n%!" (Printexc.to_string exn);
-            return ()) in
-        call_hooks hooks
 
 (* A Map from Int64 (solo5_handle_t) to an Lwt_condition. *)
 module HandleMap = Map.Make(Int64)
@@ -58,7 +41,6 @@ let wait_for_work_on_handle h =
 
 (* Execute one iteration and register a callback function *)
 let run t =
-  let t = call_hooks enter_hooks <&> t in
   let rec aux () =
     Lwt.wakeup_paused ();
     Time.restart_threads Time.Monotonic.time;
@@ -91,8 +73,3 @@ let () =
   at_exit (fun () ->
     Lwt.abandon_wakeups () ;
     run (Mirage_runtime.run_exit_hooks ()))
-
-let at_enter f = ignore (Lwt_dllist.add_l f enter_hooks)
-let at_enter_iter f = Mirage_runtime.at_enter_iter f
-let at_exit_iter f = Mirage_runtime.at_leave_iter f
-let at_exit f = Mirage_runtime.at_exit f
