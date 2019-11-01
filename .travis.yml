@@ -9,7 +9,6 @@ script: bash -ex .travis-opam.sh
 env:
     global:
         - TESTS=false PACKAGE=mirage-solo5
-        - PINS="mirage-runtime:https://github.com/samoht/mirage.git#runtime-hooks"
     matrix:
         - OCAML_VERSION=4.09 EXTRA_DEPS="solo5-bindings-hvt"
         - OCAML_VERSION=4.09 EXTRA_DEPS="solo5-bindings-spt"
