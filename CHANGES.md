@@ -1,3 +1,10 @@
+## v0.6.1 (2019-11-02)
+
+* Use at_enter_iter/at_exit_iter/at_exit hooks provided by Mirage_runtime
+  since 3.7.0 (#54 @dinosaure, see mirage/mirage#1010)
+* Remove exception handling of Lwt.poll (#55 @hannesm, see mirage/mirage#1011)
+* Require OCaml 4.06.0 (#55 @hannesm)
+
 ## v0.6.0 (2019-09-24)
 
 * Update to Solo5 0.6.0+ APIs, multiple devices support (@mato, @hannesm, #46)
