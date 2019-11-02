@@ -21,13 +21,12 @@ depends: [
   "topkg" {build & >= "0.9.0"}
   "bheap"
   "ocb-stubblr" {build}
-  "ocaml" {>= "4.05.0"}
+  "ocaml" {>= "4.06.0"}
   "cstruct" {>= "1.0.1"}
   "lwt" {>= "2.4.3"}
-  "lwt-dllist"
   "ocaml-freestanding" {>= "0.4.5"}
   "metrics"
-  "logs"
+  "mirage-runtime" {>= "3.7.0"}
   ("solo5-bindings-hvt" {>= "0.6.0" & < "0.7.0"} | "solo5-bindings-spt" {>= "0.6.0" & < "0.7.0"} | "solo5-bindings-virtio" {>= "0.6.0" & < "0.7.0"} | "solo5-bindings-muen" {>= "0.6.0" & < "0.7.0"} | "solo5-bindings-genode" {>= "0.6.0" & < "0.7.0"})
 ]
 conflicts: [

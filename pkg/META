@@ -1,6 +1,6 @@
 description = "MirageOS platform support for Solo5"
 version = "%%VERSION_NUM%%"
-requires = "lwt-dllist bheap lwt cstruct logs metrics"
+requires = "mirage-runtime bheap lwt cstruct metrics"
 archive(byte) = "oS.cma"
 archive(native) = "oS.cmxa"
 plugin(byte) = "oS.cma"
