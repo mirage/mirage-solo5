@@ -54,7 +54,6 @@ mirage_solo5_net_acquire(value v_name)
 #else
         memcpy(String_val(v_mac_address), ni.mac_address, SOLO5_NET_ALEN);
 #endif
-        v_info = caml_alloc(2, 0);
         Store_field(v_info, 0, v_mac_address);
         Store_field(v_info, 1, Val_long(ni.mtu));
     }
@@ -78,7 +77,7 @@ mirage_solo5_net_read_3(value v_handle, value v_buf, value v_buf_offset,
     size_t size = Long_val(v_size);
     size_t read_size;
     solo5_result_t result;
-    
+
     result = solo5_net_read(handle, buf, size, &read_size);
     v_result = caml_alloc_tuple(2);
     Store_field(v_result, 0, Val_int(result));
