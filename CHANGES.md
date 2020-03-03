@@ -1,3 +1,9 @@
+## v0.6.2 (2020-03-03)
+
+* Remove redundant allocation in solo5_net_stubs.c. Fixes rare memory leak (@Reperator, #56)
+* Port build system to Dune. (@hannesm, #58)
+* Support OCaml 4.10.0. (@kit-ty-kate, #57)
+
 ## v0.6.1 (2019-11-02)
 
 * Use at_enter_iter/at_exit_iter/at_exit hooks provided by Mirage_runtime
