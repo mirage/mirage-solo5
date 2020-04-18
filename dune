@@ -1,0 +1,7 @@
+(rule
+ (targets cflags)
+ ; FIXME: (package ocaml-freestanding) doesn't work with opam
+ ; install. See #3418
+ (deps %{lib:ocaml-freestanding:dune-package})
+ (action
+  (run ./config/discover.exe)))
