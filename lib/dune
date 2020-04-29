@@ -10,7 +10,7 @@
  (language c)
  (names alloc_pages_stubs clock_stubs mm_stubs atomic_stubs cstruct_stubs
         solo5_block_stubs barrier_stubs main solo5_console_stubs checksum_stubs
-        solo5_net_stubs)
+        solo5_net_stubs solo5_pci_stubs ixy_stubs)
  (flags (:include cflags.sexp) -O2 -std=c99 -Wall -Werror))
 
 (include_subdirs unqualified)

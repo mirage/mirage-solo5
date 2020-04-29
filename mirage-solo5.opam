@@ -41,7 +41,7 @@ and timers. It also provides the low level C startup code and C stubs required
 by the OCaml code.
 
 Currently this package also includes the C stubs used by the Solo5 `console`,
-`block` and `net` implementations.
+`block`, `net` and `pci` implementations.
 
 The OCaml runtime and C runtime required to support it are provided separately
 by the [ocaml-freestanding](https://github.com/mirage/ocaml-freestanding) package.
