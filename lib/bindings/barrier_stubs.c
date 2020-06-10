@@ -25,7 +25,7 @@
 #define mb()     __asm__ __volatile__("mfence" ::: "memory")
 #define rmb()    __asm__ __volatile__("lfence" ::: "memory")
 #define wmb()    __asm__ __volatile__("sfence" ::: "memory")
-#elif defined(__aarch64__)
+#elif defined(__aarch64__) || defined(__arm__)
 #define dsb(opt) __asm__ __volatile__("dsb " #opt ::: "memory")
 #define mb()     dsb(sy)
 #define rmb()    dsb(ld)
