@@ -15,7 +15,13 @@
 
 (include_subdirs unqualified)
 
-(rule (with-stdout-to cflags.sexp (run ./cflags.sh)))
+(rule
+  (with-stdout-to cflags.sexp
+    (progn
+      (echo "(")
+      (setenv PKG_CONFIG_PATH "%{lib:ocaml-freestanding:}/../pkgconfig"
+        (run pkg-config --static ocaml-freestanding --cflags))
+      (echo ")"))))
 
 (install
  (section lib)
