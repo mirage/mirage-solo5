@@ -52,15 +52,17 @@ module SleepQueue =
   Binary_heap.Make (struct
                      type t = sleep
                      let compare { time = t1; _ } { time = t2; _ } =
-                       (* bheap library only operates on maximums, but we
-                          need the minimum, so invert the order *)
-                       let invert_comparison x = -x in
-                       invert_comparison (compare t1 t2)
+                       compare t1 t2
                    end)
 
 (* Threads waiting for a timeout to expire: *)
-(* bheap datastructure needs to be created with initial strictly positive capacity *)
-let sleep_queue = SleepQueue.create 1
+let sleep_queue =
+  let dummy = {
+    time = Monotonic.time ();
+    canceled = false;
+    thread = Lwt.wait () |> snd; }
+  in
+  SleepQueue.create ~dummy 0
 
 (* Sleepers added since the last iteration of the main loop:
 
@@ -87,7 +89,7 @@ let in_the_past now t =
   t = 0L || t <= now ()
 
 let rec restart_threads now =
-  match SleepQueue.maximum sleep_queue with
+  match SleepQueue.minimum sleep_queue with
   | exception Binary_heap.Empty -> ()
   | { canceled = true; _ } ->
       SleepQueue.remove sleep_queue;
@@ -108,7 +110,7 @@ let min_timeout a b = match a, b with
   | Some a, Some b -> Some(min a b)
 
 let rec get_next_timeout () =
-  match SleepQueue.maximum sleep_queue with
+  match SleepQueue.minimum sleep_queue with
   | exception Binary_heap.Empty -> None
   | { canceled = true; _ } ->
       SleepQueue.remove sleep_queue;
