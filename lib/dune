@@ -2,7 +2,7 @@
  (name oS)
  (public_name mirage-solo5)
  (private_modules lifecycle main mM time solo5)
- (libraries mirage-runtime bheap lwt cstruct metrics)
+ (libraries mirage-runtime bheap lwt cstruct metrics duration)
  (foreign_archives mirage-solo5_bindings))
 
 (foreign_library

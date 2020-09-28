@@ -25,25 +25,18 @@
 
 open Lwt
 
-module Monotonic = struct
-  type time_kind = [`Time | `Interval]
-  type 'a t = int64 constraint 'a = [< time_kind]
+external time : unit -> int64 = "caml_get_monotonic_time"
 
-  external time : unit -> int64 = "caml_get_monotonic_time"
+type t = int64
 
-  let of_nanoseconds x = x
-
-  let ( + ) = ( Int64.add )
-  let ( - ) = ( Int64.sub )
-  let interval = ( Int64.sub )
-end
+let ( + ) = Int64.add
 
 (* +-----------------------------------------------------------------+
    | Sleepers                                                        |
    +-----------------------------------------------------------------+ *)
 
 type sleep = {
-  time : [`Time] Monotonic.t;
+  time : t;
   mutable canceled : bool;
   thread : unit Lwt.u;
 }
@@ -58,7 +51,7 @@ module SleepQueue =
 (* Threads waiting for a timeout to expire: *)
 let sleep_queue =
   let dummy = {
-    time = Monotonic.time ();
+    time = time ();
     canceled = false;
     thread = Lwt.wait () |> snd; }
   in
@@ -73,7 +66,7 @@ let new_sleeps = ref []
 
 let sleep_ns d =
   let (res, w) = Lwt.task () in
-  let t = Monotonic.(time () + of_nanoseconds d) in
+  let t = time () + d in
   let sleeper = { time = t; canceled = false; thread = w } in
   new_sleeps := sleeper :: !new_sleeps;
   Lwt.on_cancel res (fun _ -> sleeper.canceled <- true);
