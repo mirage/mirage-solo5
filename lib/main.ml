@@ -51,7 +51,7 @@ let run t =
         Mirage_runtime.run_enter_iter_hooks () ;
         let timeout =
           match Time.select_next () with
-          |None -> Time.(time () + Duration.of_day 1)
+          |None -> Int64.add (Time.time ()) (Duration.of_day 1)
           |Some tm -> tm
         in
         let ready_set = solo5_yield timeout in

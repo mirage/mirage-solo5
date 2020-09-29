@@ -78,11 +78,9 @@ let sleep_metrics =
 
 let m () = Metrics.add sleep_metrics (fun x -> x) (fun d -> d ())
 
-let ( + ) = Int64.add
-
 let sleep_ns d =
   let (res, w) = Lwt.task () in
-  let t = time () + d in
+  let t = Int64.add (time ()) d in
   let sleeper = { time = t; canceled = false; thread = w } in
   new_sleeps := sleeper :: !new_sleeps;
   m ();
