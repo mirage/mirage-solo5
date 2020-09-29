@@ -21,8 +21,7 @@
  * 02111-1307, USA.
  *)
 
-external solo5_yield : [`Time] Time.Monotonic.t -> int64 =
-    "mirage_solo5_yield_2"
+external solo5_yield : Time.t -> int64 = "mirage_solo5_yield_2"
 
 (* A Map from Int64 (solo5_handle_t) to an Lwt_condition. *)
 module HandleMap = Map.Make(Int64)
@@ -43,7 +42,7 @@ let wait_for_work_on_handle h =
 let run t =
   let rec aux () =
     Lwt.wakeup_paused ();
-    Time.restart_threads Time.Monotonic.time;
+    Time.restart_threads Time.time;
     match Lwt.poll t with
     | Some () ->
         ()
@@ -52,7 +51,7 @@ let run t =
         Mirage_runtime.run_enter_iter_hooks () ;
         let timeout =
           match Time.select_next () with
-          |None -> Time.Monotonic.(time () + of_nanoseconds 86_400_000_000_000L) (* one day = 24 * 60 * 60 s *)
+          |None -> Time.(time () + Duration.of_day 1)
           |Some tm -> tm
         in
         let ready_set = solo5_yield timeout in
