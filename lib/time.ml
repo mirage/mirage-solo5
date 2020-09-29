@@ -29,8 +29,6 @@ external time : unit -> int64 = "caml_get_monotonic_time"
 
 type t = int64
 
-let ( + ) = Int64.add
-
 (* +-----------------------------------------------------------------+
    | Sleepers                                                        |
    +-----------------------------------------------------------------+ *)
@@ -79,6 +77,8 @@ let sleep_metrics =
   Src.v ~doc ~tags:Metrics.Tags.[] ~data "sleep"
 
 let m () = Metrics.add sleep_metrics (fun x -> x) (fun d -> d ())
+
+let ( + ) = Int64.add
 
 let sleep_ns d =
   let (res, w) = Lwt.task () in
