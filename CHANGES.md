@@ -1,3 +1,9 @@
+## v0.6.3 (2020-09-29)
+
+* Adapt to bheap 2.0.0 API changes (@pascutto, #62)
+* Add Metrics for sleep queue statistics (@hannesm, #63)
+* Remove Time.Monotonic submodule (@hannesm, #65, #68, #69)
+
 ## v0.6.2 (2020-03-03)
 
 * Remove redundant allocation in solo5_net_stubs.c. Fixes rare memory leak (@Reperator, #56)
