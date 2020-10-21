@@ -54,7 +54,15 @@ let run t =
           |None -> Int64.add (Time.time ()) (Duration.of_day 1)
           |Some tm -> tm
         in
-        let ready_set = solo5_yield timeout in
+        let ready_set =
+          match Lwt.paused_count (), HandleMap.is_empty !work with
+          | 0, _ -> (* there are no threads waiting to be scheduled again *)
+            solo5_yield timeout
+          | _, false -> (* there are threads waiting to be scheduled, but we also need to check for work on handles *)
+            solo5_yield (min Time.Monotonic.(time () + of_nanoseconds 100_000L) timeout)
+          | _, true -> (* there are threads waiting to be scheduled and there are no handles being waited on *)
+            0L
+        in
         if not (Int64.equal 0L ready_set) then begin
           (* Some I/O is possible, wake up threads and continue. *)
           let is_in_set set x =
