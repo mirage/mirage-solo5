@@ -1,3 +1,13 @@
+## v0.6.4 (2020-10-27)
+
+* Synchronise interfaces with those of the newly-released mirage-xen:
+    * Provide a new OS.Memory statistics interface.
+    * Mark existing OS.MM interfaces as deprecated.
+    * Use a Makefile to build `libmirage-solo5_bindings.a`.
+    * Time: minor syntactic chagnes, remove unused `min_timeout`.
+    * (@hannesm / @mato, #72)
+* Remove superfluous conditional compilation for no longer supported OCaml versions (@hannesm, #70).
+
 ## v0.6.3 (2020-09-29)
 
 * Adapt to bheap 2.0.0 API changes (@pascutto, #62)
