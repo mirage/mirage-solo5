@@ -41,10 +41,10 @@ type sleep = {
 
 module SleepQueue =
   Binary_heap.Make (struct
-                     type t = sleep
-                     let compare { time = t1; _ } { time = t2; _ } =
-                       compare t1 t2
-                   end)
+                      type t = sleep
+                      let compare { time = t1; _ } { time = t2; _ } =
+                        compare t1 t2
+                    end)
 
 (* Threads waiting for a timeout to expire: *)
 let sleep_queue =
@@ -103,7 +103,7 @@ let rec restart_threads now =
       SleepQueue.remove sleep_queue;
       m ();
       restart_threads now
-  | { time = time; thread = thread; _ } when in_the_past now time ->
+  | { time; thread; _ } when in_the_past now time ->
       SleepQueue.remove sleep_queue;
       m ();
       Lwt.wakeup thread ();
@@ -114,11 +114,6 @@ let rec restart_threads now =
    | Event loop                                                      |
    +-----------------------------------------------------------------+ *)
 
-let min_timeout a b = match a, b with
-  | None, b -> b
-  | a, None -> a
-  | Some a, Some b -> Some(min a b)
-
 let rec get_next_timeout () =
   match SleepQueue.minimum sleep_queue with
   | exception Binary_heap.Empty -> None
@@ -126,7 +121,7 @@ let rec get_next_timeout () =
       SleepQueue.remove sleep_queue;
       m ();
       get_next_timeout ()
-  | { time = time; _ } ->
+  | { time; _ } ->
       Some time
 
 let select_next () =
