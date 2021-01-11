@@ -39,3 +39,10 @@ caml_get_monotonic_time(value v_unit)
   CAMLparam1(v_unit);
   CAMLreturn(caml_copy_int64(solo5_clock_monotonic()));
 }
+
+CAMLprim value
+caml_get_wall_clock(value v_unit)
+{
+  CAMLparam1(v_unit);
+  CAMLreturn(caml_copy_int64(solo5_clock_wall()));
+}
