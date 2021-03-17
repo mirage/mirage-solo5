@@ -33,6 +33,7 @@ conflicts: [
   "solo5-kernel-ukvm"
   "solo5-kernel-virtio"
   "solo5-kernel-muen"
+  "tcpip" {< "6.1.0"}
 ]
 synopsis: "Solo5 core platform libraries for MirageOS"
 description: """
