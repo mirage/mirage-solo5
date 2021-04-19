@@ -13,11 +13,12 @@ tags: [
   "org:mirage"
 ]
 build: [
-  ["dune" "subst"] {pinned}
-  ["dune" "build" "-p" name "-j" jobs ]
+  ["dune" "subst"] {dev}
+  ["dune" "build" "-p" name "-j" jobs]
 ]
 depends: [
   "dune" {>= "2.6.0"}
+  "conf-pkg-config" {build & >= "2"}
   "bheap" {>= "2.0.0"}
   "ocaml" {>= "4.06.0"}
   "cstruct" {>= "1.0.1"}

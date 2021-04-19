@@ -1,7 +1,5 @@
-PKG_CONFIG_PATH := $(shell opam config var prefix)/lib/pkgconfig
-
 CC ?= cc
-FREESTANDING_CFLAGS := $(shell PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) pkg-config --cflags ocaml-freestanding)
+FREESTANDING_CFLAGS := $(shell pkg-config --cflags ocaml-freestanding)
 CFLAGS := $(FREESTANDING_CFLAGS) \
     -O2 -std=c99 -Wall -Werror
 
