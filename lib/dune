@@ -2,7 +2,9 @@
  (name oS)
  (public_name mirage-solo5)
  (private_modules lifecycle main mM time solo5)
- (libraries mirage-runtime bheap lwt cstruct metrics duration))
+ (libraries mirage-runtime bheap lwt cstruct metrics duration)
+ (no_dynlink)
+ (foreign_archives mirage-solo5_bindings))
 
 (rule
  (deps
@@ -21,5 +23,4 @@
 (install
  (section lib)
  (files
-  (bindings/mirage-solo5.pc as ../pkgconfig/mirage-solo5.pc)
-  libmirage-solo5_bindings.a))
+  (bindings/mirage-solo5.pc as ../pkgconfig/mirage-solo5.pc)))

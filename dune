@@ -1,0 +1,4 @@
+(alias
+ (name default)
+ (deps
+  (package mirage-solo5)))
