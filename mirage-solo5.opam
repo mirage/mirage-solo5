@@ -25,11 +25,11 @@ depends: [
   "ocaml" {>= "4.08.0"}
   "cstruct" {>= "1.0.1"}
   "lwt" {>= "2.4.3"}
-  ("ocaml-freestanding" {>= "0.4.5"} | "mirage" {>= "4.0.0"})
+  ("ocaml-freestanding" {>= "0.4.5"} | "mirage-runtime" {>= "4.0.0"})
   "metrics"
   "mirage-runtime" {>= "3.7.0"}
   "duration"
-  ("solo5-bindings-hvt" {>= "0.6.0" & < "0.7.0"} | "solo5-bindings-spt" {>= "0.6.0" & < "0.7.0"} | "solo5-bindings-virtio" {>= "0.6.0" & < "0.7.0"} | "solo5-bindings-muen" {>= "0.6.0" & < "0.7.0"} | "solo5-bindings-genode" {>= "0.6.0" & < "0.7.0"} | "mirage" {>= "4.0.0"})
+  ("solo5-bindings-hvt" {>= "0.6.0" & < "0.7.0"} | "solo5-bindings-spt" {>= "0.6.0" & < "0.7.0"} | "solo5-bindings-virtio" {>= "0.6.0" & < "0.7.0"} | "solo5-bindings-muen" {>= "0.6.0" & < "0.7.0"} | "solo5-bindings-genode" {>= "0.6.0" & < "0.7.0"} | "mirage-runtime" {>= "4.0.0"})
 ]
 conflicts: [
   "io-page" {< "2.4.0"}
