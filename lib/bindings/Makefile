@@ -8,7 +8,7 @@ CFLAGS := $(FREESTANDING_CFLAGS) \
 .PHONY: all clean
 all: libmirage-solo5_bindings.a
 
-OBJS=alloc_pages_stubs.o clock_stubs.o mm_stubs.o atomic_stubs.o cstruct_stubs.o solo5_block_stubs.o barrier_stubs.o main.o solo5_console_stubs.o checksum_stubs.o solo5_net_stubs.o
+OBJS=alloc_pages_stubs.o clock_stubs.o mm_stubs.o atomic_stubs.o cstruct_stubs.o solo5_block_stubs.o barrier_stubs.o main.o solo5_console_stubs.o solo5_net_stubs.o
 
 libmirage-solo5_bindings.a: $(OBJS)
 	$(AR) r $@ $^
