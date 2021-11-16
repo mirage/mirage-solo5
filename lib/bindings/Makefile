@@ -1,4 +1,6 @@
-PKG_CONFIG_PATH := $(shell opam config var prefix)/lib/pkgconfig
+ifneq (, $(shell command -v opam))
+PKG_CONFIG_PATH ?= $(shell opam var prefix)/lib/pkgconfig
+endif
 
 CC ?= cc
 FREESTANDING_CFLAGS := $(shell PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) pkg-config --cflags ocaml-freestanding)
