@@ -1,3 +1,10 @@
+## v0.6.5 (2021-11-18)
+
+* Add caml_get_wall_clock to retrieve the wall clock as int64 (#73 @hannesm)
+* Remove checksum_stubs, now available through tcpip (#75 @dinosaure)
+* Remove alloc_pages_stubs, now available through io-page (#76 @dinosaure)
+* Don't require opam for the bindings compilation (#79 @hannesm)
+
 ## v0.6.4 (2020-10-27)
 
 * Synchronise interfaces with those of the newly-released mirage-xen:
