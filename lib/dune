@@ -4,10 +4,8 @@
  (foreign_stubs
   (language c)
   (names
-   alloc_pages_stubs
    atomic_stubs
    barrier_stubs
-   checksum_stubs
    clock_stubs
    cstruct_stubs
    main
