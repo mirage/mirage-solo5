@@ -1,6 +1,8 @@
 (library
  (name oS_stubs)
  (modules)
+ (libraries is_freestanding)
+ (optional)
  (foreign_stubs
   (language c)
   (names
