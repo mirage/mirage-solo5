@@ -1,3 +1,8 @@
+## unreleased
+
+* Stop manually building and installing libmirage-solo5_bindings.a.
+  This change is not compatible with MirageOS 3.
+
 ## v0.6.5 (2021-11-18)
 
 * Add caml_get_wall_clock to retrieve the wall clock as int64 (#73 @hannesm)
