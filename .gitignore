@@ -1,3 +1,5 @@
 _build
 .*.swp
 .merlin
+*.locked
+duniverse

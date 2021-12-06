@@ -1,0 +1,8 @@
+; Enable build only in the freestanding context.
+
+(alias
+ (name default)
+ (enabled_if
+  (= %{context_name} "freestanding"))
+ (deps
+  (alias_rec all)))

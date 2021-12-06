@@ -6,3 +6,14 @@ This package provides the [MirageOS](https://mirage.io/) `OS` library for [Solo5
 
 The OCaml runtime and C runtime required to support it are provided separately
 by the [ocaml-freestanding](https://github.com/mirage/ocaml-freestanding) package.
+
+## Development
+
+```
+$ git clone https://github.com/mirage/mirage-solo5
+$ cd mirage-solo5
+$ opam monorepo lock
+$ opam monorepo pull
+$ opam install ocaml-freestanding dune
+$ dune build
+```

@@ -2,6 +2,18 @@
  (name oS)
  (public_name mirage-solo5)
  (private_modules lifecycle main mM time solo5)
- (libraries mirage-runtime bheap lwt cstruct metrics duration))
+ (libraries mirage-runtime bheap lwt cstruct metrics duration)
+ (foreign_stubs
+  (language c)
+  (names
+   atomic_stubs
+   barrier_stubs
+   clock_stubs
+   cstruct_stubs
+   main
+   mm_stubs
+   solo5_block_stubs
+   solo5_console_stubs
+   solo5_net_stubs)))
 
 (include_subdirs unqualified)
