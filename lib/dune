@@ -5,15 +5,6 @@
  (libraries mirage-runtime bheap lwt cstruct metrics duration)
  (foreign_stubs
   (language c)
-  (names
-   atomic_stubs
-   barrier_stubs
-   clock_stubs
-   cstruct_stubs
-   main
-   mm_stubs
-   solo5_block_stubs
-   solo5_console_stubs
-   solo5_net_stubs)))
+  (names clock_stubs main mm_stubs)))
 
 (include_subdirs unqualified)
