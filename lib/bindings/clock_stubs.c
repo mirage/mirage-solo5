@@ -23,26 +23,10 @@
 #include <caml/memory.h>
 #include <caml/fail.h>
 
-CAMLprim value
-unix_gettimeofday(value v_unit)
-{
-  CAMLparam1(v_unit);
-  struct timeval tp;
-  if (gettimeofday(&tp, NULL) == -1)
-    caml_failwith("gettimeofday");
-  CAMLreturn(caml_copy_double((double) tp.tv_sec + (double) tp.tv_usec / 1e6));
-}
 
 CAMLprim value
 caml_get_monotonic_time(value v_unit)
 {
   CAMLparam1(v_unit);
   CAMLreturn(caml_copy_int64(solo5_clock_monotonic()));
-}
-
-CAMLprim value
-caml_get_wall_clock(value v_unit)
-{
-  CAMLparam1(v_unit);
-  CAMLreturn(caml_copy_int64(solo5_clock_wall()));
 }

@@ -2,24 +2,23 @@
  (name oS)
  (public_name mirage-solo5)
  (private_modules lifecycle main mM time solo5)
- (libraries mirage-runtime bheap lwt cstruct metrics duration))
+ (libraries mirage-runtime bheap lwt cstruct metrics duration)
+ (no_dynlink)
+ (foreign_archives mirage-solo5_bindings))
 
 (rule
- (deps
-  (source_tree bindings))
  (target libmirage-solo5_bindings.a)
- (action
-  (no-infer
-   (progn
-    (chdir
-     bindings
-     (run %{make}))
-    (copy bindings/libmirage-solo5_bindings.a libmirage-solo5_bindings.a)))))
+ (deps
+  (:dep libmirage-solo5_bindings.%{context_name}.a))
+ (action (copy %{dep} %{target})))
+
+(rule
+ (enabled_if (= %{context_name} freestanding))
+ (target libmirage-solo5_bindings.freestanding.a)
+ (action (copy bindings/libmirage-solo5_bindings.a %{target})))
+
+(rule
+ (target libmirage-solo5_bindings.default.a)
+ (action (copy stub/libmirage-solo5_bindings.a %{target})))
 
 (include_subdirs unqualified)
-
-(install
- (section lib)
- (files
-  (bindings/mirage-solo5.pc as ../pkgconfig/mirage-solo5.pc)
-  libmirage-solo5_bindings.a))

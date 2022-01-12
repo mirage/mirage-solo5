@@ -1,3 +1,3 @@
-(lang dune 2.6)
+(lang dune 2.7)
 (name mirage-solo5)
 (formatting disabled)
