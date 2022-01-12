@@ -1,4 +1,5 @@
 (executable
+ (enabled_if (= %{context_name} freestanding))
  (name main)
  (link_flags
   -cclib

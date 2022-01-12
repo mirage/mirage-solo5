@@ -3,8 +3,22 @@
  (public_name mirage-solo5)
  (private_modules lifecycle main mM time solo5)
  (libraries mirage-runtime bheap lwt cstruct metrics duration)
- (foreign_stubs
-  (language c)
-  (names clock_stubs main mm_stubs)))
+ (no_dynlink)
+ (foreign_archives mirage-solo5_bindings))
+
+(rule
+ (target libmirage-solo5_bindings.a)
+ (deps
+  (:dep libmirage-solo5_bindings.%{context_name}.a))
+ (action (copy %{dep} %{target})))
+
+(rule
+ (enabled_if (= %{context_name} freestanding))
+ (target libmirage-solo5_bindings.freestanding.a)
+ (action (copy bindings/libmirage-solo5_bindings.a %{target})))
+
+(rule
+ (target libmirage-solo5_bindings.default.a)
+ (action (copy stub/libmirage-solo5_bindings.a %{target})))
 
 (include_subdirs unqualified)
