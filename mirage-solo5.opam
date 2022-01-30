@@ -23,7 +23,7 @@ depends: [
   "cstruct" {>= "1.0.1"}
   "lwt" {>= "2.4.3"}
   "metrics"
-  "mirage-runtime" {>= "4.0.0"}
+  "mirage-runtime" {>= "4.0"}
   "duration"
 ]
 conflicts: [
@@ -43,8 +43,3 @@ Currently this package also includes the C stubs used by the Solo5 `console`,
 The OCaml runtime and C runtime required to support it are provided separately
 by the [ocaml-freestanding](https://github.com/mirage/ocaml-freestanding) package.
 """
-pin-depends:[ 
-  [ "mirage-runtime.4.0.0" "git+https://github.com/mirage/mirage.git#59101cd795e741982a0a4580c113072339e1389b" ]
-  [ "functoria-runtime.4.0.0" "git+https://github.com/mirage/mirage.git#59101cd795e741982a0a4580c113072339e1389b" ]
-  [ "functoria.4.0.0" "git+https://github.com/mirage/mirage.git#59101cd795e741982a0a4580c113072339e1389b" ]
-]
