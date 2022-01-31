@@ -1,7 +1,9 @@
-## unreleased
+## v0.7.0
 
-* Stop manually building and installing libmirage-solo5_bindings.a.
-  This change is not compatible with MirageOS 3.
+* Support Mirage OS 4. Stop manually building and installing
+  `libmirage-solo5_bindings.a`. This change is not compatible
+  with MirageOS 3 (#82, @dinosaure, @TheLortex)
+* Rename the OS module into Solo5_os (#83, @dinosaure)
 
 ## v0.6.5 (2021-11-18)
 
