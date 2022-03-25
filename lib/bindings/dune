@@ -1,5 +1,5 @@
 (rule
- (enabled_if (= %{context_name} freestanding))
+ (enabled_if (= %{context_name} solo5))
  (deps (source_tree .))
  (targets libmirage-solo5_bindings.a)
  (action (no-infer (progn (run %{make})))))

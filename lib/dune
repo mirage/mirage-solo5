@@ -13,8 +13,8 @@
  (action (copy %{dep} %{target})))
 
 (rule
- (enabled_if (= %{context_name} freestanding))
- (target libmirage-solo5_bindings.freestanding.a)
+ (enabled_if (= %{context_name} solo5))
+ (target libmirage-solo5_bindings.solo5.a)
  (action (copy bindings/libmirage-solo5_bindings.a %{target})))
 
 (rule
