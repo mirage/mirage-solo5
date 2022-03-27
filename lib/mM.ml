@@ -1,8 +1,7 @@
-
 (* that should actually all be size_t *)
 type mallinfo = {
   arena : int; (* non-mmapped space allocated from system *)
-  ordblks : int;  (* number of free chunks *)
+  ordblks : int; (* number of free chunks *)
   (*smblks; /* always 0 */
     hblks; /* always 0 */ *)
   hblkhd : int; (* space in mmapped regions *)
@@ -21,12 +20,14 @@ let malloc_metrics ~tags =
   let data () =
     let stat = mallinfo () in
     Data.v
-      [ uint "non-mmapped allocated bytes" stat.arena
-      ; uint "free chunk count" stat.ordblks
-      ; uint "mmapped region count" stat.hblkhd
-      ; uint "maximum allocated space" stat.usmblks
-      ; uint "total allocated space" stat.uordblks
-      ; uint "total free space" stat.fordblks
-      ; uint "maximum releasable bytes" stat.keepcost ]
+      [
+        uint "non-mmapped allocated bytes" stat.arena;
+        uint "free chunk count" stat.ordblks;
+        uint "mmapped region count" stat.hblkhd;
+        uint "maximum allocated space" stat.usmblks;
+        uint "total allocated space" stat.uordblks;
+        uint "total free space" stat.fordblks;
+        uint "maximum releasable bytes" stat.keepcost;
+      ]
   in
   Src.v ~doc ~tags ~data "malloc"

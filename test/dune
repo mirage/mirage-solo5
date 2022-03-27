@@ -1,5 +1,6 @@
 (executable
- (enabled_if (= %{context_name} freestanding))
+ (enabled_if
+  (= %{context_name} freestanding))
  (name main)
  (link_flags
   -cclib
@@ -23,7 +24,7 @@
   (with-stdout-to
    %{target}
    (bash
-    "if [ ! -z \"${MODE+x}\" ]; then echo -n \"$MODE\"; else echo -n \"hvt\"; fi"))))
+     "if [ ! -z \"${MODE+x}\" ]; then echo -n \"$MODE\"; else echo -n \"hvt\"; fi"))))
 
 (rule
  (target solo5_abi_flag)

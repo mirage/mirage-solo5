@@ -10,15 +10,19 @@
  (target libmirage-solo5_bindings.a)
  (deps
   (:dep libmirage-solo5_bindings.%{context_name}.a))
- (action (copy %{dep} %{target})))
+ (action
+  (copy %{dep} %{target})))
 
 (rule
- (enabled_if (= %{context_name} solo5))
+ (enabled_if
+  (= %{context_name} solo5))
  (target libmirage-solo5_bindings.solo5.a)
- (action (copy bindings/libmirage-solo5_bindings.a %{target})))
+ (action
+  (copy bindings/libmirage-solo5_bindings.a %{target})))
 
 (rule
  (target libmirage-solo5_bindings.default.a)
- (action (copy stub/libmirage-solo5_bindings.a %{target})))
+ (action
+  (copy stub/libmirage-solo5_bindings.a %{target})))
 
 (include_subdirs unqualified)
