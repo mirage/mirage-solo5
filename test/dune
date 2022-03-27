@@ -1,6 +1,6 @@
 (executable
  (enabled_if
-  (= %{context_name} freestanding))
+  (= %{context_name} solo5))
  (name main)
  (link_flags
   -cclib
@@ -37,7 +37,7 @@
 (rule
  (alias runtest)
  (enabled_if
-  (= %{context_name} freestanding))
+  (= %{context_name} solo5))
  (action
   (with-accepted-exit-codes
    0
