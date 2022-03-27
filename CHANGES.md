@@ -1,4 +1,9 @@
-## v0.7.0
+## v0.8.0 (2022-03-27)
+
+* Rename the freestanding toolchain to solo5 (@dinosaure, @samoht, #84, #88)
+* Use ocamlformat (@samoht, #87)
+
+## v0.7.0 (2022-01-31)
 
 * Support Mirage OS 4. Stop manually building and installing
   `libmirage-solo5_bindings.a`. This change is not compatible
