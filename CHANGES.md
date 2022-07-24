@@ -1,3 +1,9 @@
+## v0.9.0 (2022-07-24)
+
+* provide Memory.stat (uses dlmalloc mallinfo - expensive), and Memory.trim
+  (releases free memory), improve Memory.quick_stat accuracy using ocaml-solo5
+  0.8.1 (@palainp #91)
+
 ## v0.8.0 (2022-03-27)
 
 * Rename the freestanding toolchain to solo5 (@dinosaure, @samoht, #84, #88)
