@@ -14,6 +14,6 @@ $ git clone https://github.com/mirage/mirage-solo5
 $ cd mirage-solo5
 $ opam monorepo lock
 $ opam monorepo pull
-$ opam install ocaml-freestanding dune
+$ opam install ocaml-solo5 dune
 $ dune build
 ```
