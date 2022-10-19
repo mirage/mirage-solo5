@@ -49,9 +49,11 @@ let run t =
         (* Call enter hooks. *)
         Mirage_runtime.run_enter_iter_hooks ();
         let timeout =
-          match Time.select_next () with
-          | None -> Int64.add (Time.time ()) (Duration.of_day 1)
-          | Some tm -> tm
+          if Lwt.paused_count () > 0 then 0L
+          else
+            match Time.select_next () with
+            | None -> Int64.add (Time.time ()) (Duration.of_day 1)
+            | Some tm -> tm
         in
         let ready_set = solo5_yield timeout in
         (if not (Int64.equal 0L ready_set) then
