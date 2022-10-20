@@ -1,3 +1,10 @@
+## v0.9.1 (2022-10-19)
+
+* Improve performance and take the opportunity to resolve pending
+  processes which are only _paused_ (with `Lwt.pause`) instead to
+  waiting a sleeping process (#92, @TheLortex, @dinosaure, @haesbaert, @reynir,
+  @hannesm)
+
 ## v0.9.0 (2022-07-24)
 
 * provide Memory.stat (uses dlmalloc mallinfo - expensive), and Memory.trim
