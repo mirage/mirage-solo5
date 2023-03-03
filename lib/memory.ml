@@ -46,3 +46,20 @@ let quick_stat () =
   let l = get_fast_live_words () in
   let s = get_stack_words () in
   { heap_words = h; live_words = l; stack_words = s; free_words = h - l - s }
+
+let metrics ?(quick = true) ~tags () =
+  let open Metrics in
+  let doc = "Memory counters" in
+  let stat = if quick then quick_stat else stat in
+  let data () =
+    let stat = stat () in
+    Data.v
+      [ uint "memory heap words" stat.heap_words
+      ; uint "memory live words" stat.live_words
+      ; uint "memory stack words" stat.stack_words
+      ; uint "memory free words" stat.free_words ]
+  in
+  Src.v ~doc ~tags ~data "memory"
+
+let () =
+  Metrics_lwt.periodically (metrics ~tags:Metrics.Tags.[] ())

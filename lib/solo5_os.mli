@@ -44,13 +44,12 @@ module Memory : sig
   val trim : unit -> unit
   (** [trim ()] release free memory from the heap (may update the value returned
       by {!quick_stat}) *)
-end
 
-module MM : sig
-  val malloc_metrics :
-    tags:'a Metrics.Tags.t -> ('a, unit -> Metrics.Data.t) Metrics.src
-    [@@ocaml.deprecated
-      "This function will be deprecated. Use {!Memory.quick_stat} instead."]
+  val metrics : ?quick:bool -> tags:'a Metrics.Tags.t -> unit ->
+    ('a, unit -> Metrics.Data.t) Metrics.src
+  (** [metrics ~quick ~tags] is a metrics source calling {quick_stat} (unless
+      [quick] is set to [false]) or {stat}. By default, this metrics source is
+      registered with [Metrics_lwt.periodically] (with [quick] set to [true]. *)
 end
 
 module Time : sig
