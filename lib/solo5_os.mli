@@ -45,7 +45,10 @@ module Memory : sig
   (** [trim ()] release free memory from the heap (may update the value returned
       by {!quick_stat}) *)
 
-  val metrics : ?quick:bool -> tags:'a Metrics.Tags.t -> unit ->
+  val metrics :
+    ?quick:bool ->
+    tags:'a Metrics.Tags.t ->
+    unit ->
     ('a, unit -> Metrics.Data.t) Metrics.src
   (** [metrics ~quick ~tags] is a metrics source calling {quick_stat} (unless
       [quick] is set to [false]) or {stat}. By default, this metrics source is

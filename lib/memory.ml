@@ -54,12 +54,13 @@ let metrics ?(quick = true) ~tags () =
   let data () =
     let stat = stat () in
     Data.v
-      [ uint "memory heap words" stat.heap_words
-      ; uint "memory live words" stat.live_words
-      ; uint "memory stack words" stat.stack_words
-      ; uint "memory free words" stat.free_words ]
+      [
+        uint "memory heap words" stat.heap_words;
+        uint "memory live words" stat.live_words;
+        uint "memory stack words" stat.stack_words;
+        uint "memory free words" stat.free_words;
+      ]
   in
   Src.v ~doc ~tags ~data "memory"
 
-let () =
-  Metrics_lwt.periodically (metrics ~tags:Metrics.Tags.[] ())
+let () = Metrics_lwt.periodically (metrics ~tags:Metrics.Tags.[] ())
