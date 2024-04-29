@@ -23,8 +23,6 @@
  * 02111-1307, USA.
  *)
 
-open Lwt
-
 external time : unit -> int64 = "caml_get_monotonic_time"
 
 type t = int64
@@ -81,10 +79,6 @@ let sleep_ns d =
   Lwt.on_cancel res (fun _ -> sleeper.canceled <- true);
   res
 
-exception Timeout
-
-let timeout d = sleep_ns d >>= fun () -> Lwt.fail Timeout
-let with_timeout d f = Lwt.pick [ timeout d; Lwt.apply f () ]
 let in_the_past now t = t = 0L || t <= now ()
 
 let rec restart_threads now =
