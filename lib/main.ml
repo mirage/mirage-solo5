@@ -57,14 +57,14 @@ let run t =
         in
         let ready_set = solo5_yield timeout in
         (if not (Int64.equal 0L ready_set) then
-         (* Some I/O is possible, wake up threads and continue. *)
-         let is_in_set set x =
-           not Int64.(equal 0L (logand set (shift_left 1L (to_int x))))
-         in
-         HandleMap.iter
-           (fun k v ->
-             if is_in_set ready_set k then Lwt_condition.broadcast v ())
-           !work);
+           (* Some I/O is possible, wake up threads and continue. *)
+           let is_in_set set x =
+             not Int64.(equal 0L (logand set (shift_left 1L (to_int x))))
+           in
+           HandleMap.iter
+             (fun k v ->
+               if is_in_set ready_set k then Lwt_condition.broadcast v ())
+             !work);
         (* Call leave hooks. *)
         Mirage_runtime.run_leave_iter_hooks ();
         aux ()

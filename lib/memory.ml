@@ -15,16 +15,16 @@
  *)
 
 external get_heap_words : unit -> int = "mirage_memory_get_heap_words"
-  [@@noalloc]
+[@@noalloc]
 
 external get_live_words : unit -> int = "mirage_memory_get_live_words"
-  [@@noalloc]
+[@@noalloc]
 
 external get_fast_live_words : unit -> int = "mirage_memory_get_fast_live_words"
-  [@@noalloc]
+[@@noalloc]
 
 external get_stack_words : unit -> int = "mirage_memory_get_stack_words"
-  [@@noalloc]
+[@@noalloc]
 
 external trim : unit -> unit = "mirage_trim_allocation" [@@noalloc]
 
