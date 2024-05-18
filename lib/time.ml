@@ -34,13 +34,15 @@ type t = int64
 module SleepQueue = Binary_heap.Make (struct
   type t = Mirage_time.sleep
 
-  let compare Mirage_time.{ time = t1; _ } Mirage_time.{ time = t2; _ } = compare t1 t2
+  let compare Mirage_time.{ time = t1; _ } Mirage_time.{ time = t2; _ } =
+    compare t1 t2
 end)
 
 (* Threads waiting for a timeout to expire: *)
 let sleep_queue =
   let dummy =
-    Mirage_time.{ time = time (); canceled = false; thread = Lwt.wait () |> snd }
+    Mirage_time.
+      { time = time (); canceled = false; thread = Lwt.wait () |> snd }
   in
   SleepQueue.create ~dummy 0
 
@@ -49,15 +51,11 @@ let sleep_metrics =
   let doc = "Sleep queue size" in
   let data () =
     let q_size = SleepQueue.length sleep_queue in
-    Data.v
-      [
-        uint "sleep queue size" q_size;
-      ]
+    Data.v [ uint "sleep queue size" q_size ]
   in
   Src.v ~doc ~tags:Metrics.Tags.[] ~data "sleep"
 
 let m () = Metrics.add sleep_metrics (fun x -> x) (fun d -> d ())
-
 let in_the_past now t = t = 0L || t <= now ()
 
 let rec restart_threads now =
@@ -90,7 +88,8 @@ let rec get_next_timeout () =
 let select_next () =
   (* Transfer all sleepers added since the last iteration to the main
      sleep queue: *)
-  List.iter (fun e -> SleepQueue.add sleep_queue e)
+  List.iter
+    (fun e -> SleepQueue.add sleep_queue e)
     (Mirage_time.new_sleepers ());
   m ();
   get_next_timeout ()
