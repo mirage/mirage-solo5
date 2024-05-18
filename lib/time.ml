@@ -32,15 +32,15 @@ type t = int64
    +-----------------------------------------------------------------+ *)
 
 module SleepQueue = Binary_heap.Make (struct
-  type t = Mirage_runtime.sleep
+  type t = Mirage_time.sleep
 
-  let compare Mirage_runtime.{ time = t1; _ } Mirage_runtime.{ time = t2; _ } = compare t1 t2
+  let compare Mirage_time.{ time = t1; _ } Mirage_time.{ time = t2; _ } = compare t1 t2
 end)
 
 (* Threads waiting for a timeout to expire: *)
 let sleep_queue =
   let dummy =
-    Mirage_runtime.{ time = time (); canceled = false; thread = Lwt.wait () |> snd }
+    Mirage_time.{ time = time (); canceled = false; thread = Lwt.wait () |> snd }
   in
   SleepQueue.create ~dummy 0
 
@@ -91,6 +91,6 @@ let select_next () =
   (* Transfer all sleepers added since the last iteration to the main
      sleep queue: *)
   List.iter (fun e -> SleepQueue.add sleep_queue e)
-    (Mirage_runtime.get_new_sleepers ());
+    (Mirage_time.new_sleepers ());
   m ();
   get_next_timeout ()
