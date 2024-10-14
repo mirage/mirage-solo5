@@ -21,6 +21,7 @@
 #include <caml/memory.h>
 #include <caml/callback.h>
 #include <caml/alloc.h>
+#include <caml/backtrace.h>
 
 static char *unused_argv[] = { "mirage", NULL };
 static const char *solo5_cmdline = "";
@@ -117,6 +118,7 @@ int solo5_app_main(const struct solo5_start_info *si)
     _nolibc_init(si->heap_start, si->heap_size);
     solo5_heap_size = si->heap_size;
     solo5_cmdline = si->cmdline;
+    caml_record_backtraces(1);
     caml_startup(unused_argv);
 
     return 0;
