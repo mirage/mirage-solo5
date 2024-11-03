@@ -20,7 +20,6 @@ depends: [
   "dune" {>= "2.7.0"}
   "bheap" {>= "2.0.0"}
   "ocaml" {>= "4.08.0"}
-  "cstruct" {>= "1.0.1"}
   "lwt" {>= "2.4.3"}
   "metrics"
   "metrics-lwt" {>= "0.2.0"}
