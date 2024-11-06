@@ -1,3 +1,7 @@
+## v0.9.4 (2024-11-06)
+
+* Remove dependency on cstruct (#99 @palainp)
+
 ## v0.9.3 (2024-04-29)
 
 * Time: remove Timeout exception, and unused timeout and with_timeout functions
