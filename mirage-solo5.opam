@@ -24,7 +24,7 @@ depends: [
   "metrics"
   "metrics-lwt" {>= "0.2.0"}
   "mirage-runtime" {>= "4.6.0"}
-  "mirage-time" {>= "4.0.0"}
+  "mirage-sleep" {>= "4.0.0"}
   "duration"
 ]
 conflicts: [
