@@ -1,3 +1,7 @@
+## v0.10.0 (2025-02-05)
+
+* Use dune-variants, sleeper storage is now in mirage-sleep (#96 @hannesm)
+
 ## v0.9.4 (2024-11-06)
 
 * Remove dependency on cstruct (#99 @palainp)
