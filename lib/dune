@@ -2,7 +2,8 @@
  (name solo5_os)
  (public_name mirage-solo5)
  (private_modules lifecycle main memory time solo5)
- (libraries mirage-runtime bheap lwt metrics metrics-lwt duration)
+ (libraries mirage-runtime bheap lwt metrics metrics-lwt duration
+   mirage-sleep)
  (no_dynlink)
  (foreign_archives mirage-solo5_bindings))
 
