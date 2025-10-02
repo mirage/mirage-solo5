@@ -107,6 +107,15 @@ mirage_trim_allocation(value v_unit)
     return Val_long(malloc_trim(0));
 }
 
+/*
+ * Caller: Main, @@noalloc
+ */
+CAMLprim value
+mirage_clzll(value v_int64)
+{
+    return Val_int(__builtin_clzll(Int64_val(v_int64)));
+}
+
 extern void _nolibc_init(uintptr_t, size_t);
 
 int solo5_app_main(const struct solo5_start_info *si)
